@@ -26,17 +26,17 @@ module.exports = {
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js' }),
-        new FaviconsWebpackPlugin('./src/favicon.png'),
+        new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
         new ForkTsCheckerWebpackPlugin({
             async: false,
             memoryLimit: 4096,
             checkSyntacticErrors: true
         }),
         new webpack.NoEmitOnErrorsPlugin(),
-        new UglifyJSPlugin(/*{
+        new UglifyJSPlugin({
             unused: true,
             dead_code: true
-        }*/),
+        }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production'),
             'process.env.API_BASE_URL': JSON.stringify('#{ApiBaseUrl}'),

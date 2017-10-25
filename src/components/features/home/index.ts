@@ -1,2 +1,2 @@
-export const homePath = '/home';
+export const homePath = '/';
 export * from './component';
