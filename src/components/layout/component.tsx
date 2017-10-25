@@ -32,12 +32,10 @@ export class Layout extends React.Component<Partial<ILayoutProps>> {
         const { config } = this.props;
         return [
             <Header key="head" />,
-            <main key="main" className="container section" role="main">
-                <Switch>
-                    {publicRoutes.map(this.renderRoute)}
-                    <Route component={NotFound} />
-                </Switch>
-            </main>,
+            <Switch key="main">
+                {publicRoutes.map(this.renderRoute)}
+                <Route component={NotFound} />
+            </Switch>,
             ...config.development ? [<DevTools position={{bottom: 0}} key="devtools" />] : []
         ];
     }
