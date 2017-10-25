@@ -1,9 +1,15 @@
+// tslint:disable:max-line-length
 import * as React from 'react';
 import {
-    withRouter
+    withRouter,
+    Link
 } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 import { observer } from 'mobx-react';
+import { homePath } from '../features/home/index';
+import { dataPath } from '../features/data/index';
+import { fxRatesPath } from '../features/fxRates/index';
+import { aboutPath } from '../features/about/index';
 
 interface IHeaderProps extends RouteComponentProps<{}> {
 }
@@ -11,25 +17,39 @@ interface IHeaderProps extends RouteComponentProps<{}> {
 @withRouter
 @observer
 export class Header extends React.Component<Partial<IHeaderProps>> {
-/*
+
     publicLinks = [
-        { path: homePath, title: 'Home' },
-        { path: dataPath, title: 'Data' },
-        { path: fxRatesPath, title: 'FX Rates' },
-        { path: aboutPath, title: 'About' },
+        { path: homePath, className: 's-home', title: 'Home' },
+        { path: dataPath, className: 's-world', title: 'World' },
+        { path: fxRatesPath, className: 's-london', title: 'London' },
+        { path: aboutPath, className: 's-brighton', title: 'Brighton' },
+        { path: fxRatesPath, className: 's-funny', title: 'Funny' },
+        { path: aboutPath, className: 's-webdev', title: 'WebDev' },
+        { path: fxRatesPath, className: 's-home', title: 'Feedback' },
     ];
 
-    renderLink({ path, title }: { path: string, title: string }) {
-        return (
-            <Menu.Item key={path} active={this.props.location.pathname === path}>
-                <Link key={path} to={path}>{title}</Link>
-            </Menu.Item>
-        );
-    }
-*/
     render() {
         return (
             <header className="main-header">
+
+                <svg xmlns="http://www.w3.org/2000/svg" style={{display: 'none'}}>
+                    <symbol id="icon_x" viewBox="0 0 18 18">
+                        <title>Close x</title>
+                        <polygon points="16.43 3.7 14.3 1.57 9 6.88 3.7 1.57 1.57 3.7 6.88 9 1.57 14.3 3.7 16.43 9 11.12 14.3 16.43 16.43 14.3 11.12 9 16.43 3.7" />
+                    </symbol>
+                    <symbol id="icon_comment" viewBox="0 0 22 22">
+                        <title>Comment icon</title>
+                        <path d="M0,13.58c2.58-.09,3.94-1.81,3.8-4.34H0V2H7.15V9.28c0,4.57-2.71,6.56-7.15,6.87Zm10.86,0c2.58-.09,3.93-1.81,3.8-4.34h-3.8V2H18V9.28c0,4.57-2.71,6.56-7.14,6.87Z" />
+                    </symbol>
+                    <symbol id="icon_arrow" viewBox="0 0 18 18">
+                        <title>Open arrow</title>
+                        <polygon points="8.43 13.77 15.85 6.35 13.73 4.23 8.43 9.53 3.12 4.23 1 6.35 8.43 13.77" />
+                    </symbol>
+                    <symbol id="logo_readspike" viewBox="0 0 16 16">
+                        <title>Readspike logo</title>
+                        <path d="M8,16,5.17,12.21,2.89,8V2.25L8,0l5.14,2.25V8L10.78,12.3ZM6.73,10.7,8,12.39,9.27,10.7l1.67-3.06v-4L8,2.39,5.06,3.68v4Z" />
+                    </symbol>
+                </svg>
 
                 <a href="" className="logo-link" target="_self">
                     <svg className="logo-readspike" style={{ fill: '#fff' }}>><use xlinkHref="#logo_readspike" /></svg>
@@ -48,13 +68,7 @@ export class Header extends React.Component<Partial<IHeaderProps>> {
                         Show menu
                         </label>
                     <ul className="main-nav__items">
-                        <li><a href="" className="s-home" target="_self">Home</a></li>
-                        <li><a href="world" className="s-world" target="_self">World</a></li>
-                        <li><a href="london" className="s-london" target="_self">London</a></li>
-                        <li><a href="brighton" className="s-brighton" target="_self">Brighton</a></li>
-                        <li><a href="funny" className="s-funny" target="_self">Funny</a></li>
-                        <li><a href="webdev" className="s-webdev" target="_self">WebDev</a></li>
-                        <li><a href="contact" className="s-home" target="_self">Feedback</a></li>
+                        {this.publicLinks.map(({ path, title }) => <li key={path}><Link to={path}>{title}</Link></li>)}
                     </ul>
                 </nav>
 

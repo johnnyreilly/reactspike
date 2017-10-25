@@ -38,7 +38,7 @@ export class Layout extends React.Component<Partial<ILayoutProps>> {
                     <Route component={NotFound} />
                 </Switch>
             </main>,
-            ...config.development ? [<DevTools key="devtools" />] : []
+            ...config.development ? [<DevTools position={{bottom: 0}} key="devtools" />] : []
         ];
     }
 }
