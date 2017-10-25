@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`counter component renders as expected 1`] = `
+<div>
+  The count is: 
+  0
+  <button
+    onClick={[Function]}
+  >
+    Increment counter
+  </button>
+</div>
+`;
