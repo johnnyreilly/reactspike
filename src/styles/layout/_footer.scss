@@ -1,0 +1,77 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the footer of the site/application.
+// -----------------------------------------------------------------------------
+
+/* footer */
+
+.page-footer {
+  width: 100%;
+  padding: $global-margin $global-margin/2 0;
+  text-transform: uppercase;
+  font-size: $small-font-size;
+  font-weight: $font-weight-bold;
+  text-align: right;
+
+  @include media-query('md'){
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-direction: row;
+    padding: $global-margin*2 $global-margin/2;
+  }
+
+    a:hover,
+    a:hover .icon,
+    label:hover {
+      background-color: transparent;
+      color: darken($text-color, 10%);
+      fill:  darken($text-color, 10%);
+  }
+}
+
+
+.page-footer .logo-link {
+  flex-grow: 2;
+  display: block;
+  margin-bottom: $global-margin;
+
+  @include media-query('md'){
+    margin-bottom: 0;
+  }
+}
+
+.page-footer .colofon,
+.page-footer .back-to-top,
+.page-footer .checkbox-label {
+  display: block;
+  color: #666;
+  margin-bottom: $global-margin;
+
+  @include media-query('md'){
+    margin-left: $global-margin;
+    margin-bottom: 0;
+  }
+
+  &::selection {
+    background-color: transparent;
+  }
+}
+
+.back-to-top {
+  padding: 1rem;
+}
+
+.back-to-top .icon {
+  transform: rotate(180deg) scale(2);
+  fill: #666;
+}
+
+
+.page-footer .logo-link {
+  color: inherit;
+  font-weight: $font-weight-regular;
+
+  @include media-query('md'){
+  }
+}

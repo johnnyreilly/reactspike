@@ -1,0 +1,17 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass variables.
+// -----------------------------------------------------------------------------
+
+// global bottom margin
+$global-margin: 2rem;
+
+// MEDIA QUERIES
+
+/// Breakpoints map
+$breakpoints: (
+  default: null,
+  sm: 34em, //544px
+  md: 48em, //768px
+  lg: 62em, //992px
+  xl: 75em  //1200px
+) !default;

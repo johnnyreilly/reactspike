@@ -1,0 +1,42 @@
+// -----------------------------------------------------------------------------
+// This file contains the grid
+// -----------------------------------------------------------------------------
+
+.col-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-top: 4rem;
+
+  @include media-query('md'){
+    display: block;
+  }
+
+}
+
+.col-group .col {
+  display: flex;
+  flex-direction: column;
+
+  @include media-query(md) {
+    width: 50%;
+    float: left;
+    padding: 0 $global-margin/2;
+  }
+
+  @include media-query(lg) {
+    width: 33.3333%;
+  }
+
+}
+
+// this is to stop the flash of re-ordering FAILS ON ANDROID!
+// @keyframes fadeInLists {
+//   from {opacity: 0;}
+//   to   {opacity: 1;}
+// }
+
+.link-section {
+  opacity: 1;
+//  animation: fadeInLists .25s ease-out forwards;
+}

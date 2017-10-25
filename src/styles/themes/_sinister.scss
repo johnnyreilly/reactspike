@@ -1,0 +1,37 @@
+// -----------------------------------------------------------------------------
+// Left handed mode
+// -----------------------------------------------------------------------------
+
+#sinister {
+  border: none;
+  background: #111;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+#sinister:focus {
+  outline: none;
+}
+
+#sinister:checked {
+  background-color: #006b99;
+}
+
+.sinister .tooltip-holder {
+  left: 7rem;
+}
+
+/* sinister layout */
+
+.sinister .story-title {order: 3;}
+.sinister .comments    {order: 1;}
+.sinister .show-image  {order: 2;}
+.sinister .hide-image  {order: 2;}
+.sinister .full-image  {order: 4;}
+
+.sinister .comments .icon {
+  transform: scaleX(-1);
+}

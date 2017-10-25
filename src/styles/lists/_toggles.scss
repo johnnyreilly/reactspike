@@ -1,0 +1,81 @@
+// -----------------------------------------------------------------------------
+// This file contains the toggle button styles
+// -----------------------------------------------------------------------------
+
+.toggle-list {
+  display: none;
+  opacity: 0;
+}
+
+.fadeInTogglers { // shows toggers
+  animation: fadeInTogglers .25s ease-out forwards;
+}
+
+@keyframes fadeInTogglers {
+  from {opacity: 0;}
+  to   {opacity: 1;}
+}
+
+
+.links-list li:nth-child(n+8),
+.links-list li:nth-child(n+10) {
+  display: none;
+}
+
+@include media-query('sm'){
+  .links-list li:nth-child(-n+10)  {
+    display: flex;
+  }
+}
+
+.toggle-list:checked ~ .links-list li {
+  display: flex;
+
+  @include media-query('md'){
+    background-color: transparent;
+  }
+}
+
+.toggle-list:checked ~ label .icon {
+  transform: rotate(180deg);
+}
+
+.toggle-list ~ label  {
+  font-size: 0;
+  line-height: $base-line-height;
+  padding-right: $global-margin/2;
+  cursor: pointer;
+  color: transparent;
+  text-align: right;
+  flex: 1;
+  text-transform: uppercase;
+  opacity: .5;
+  font-weight: $font-weight-bold;
+}
+.toggle-list ~ label.toggler-footer  {
+  // display: none;
+  text-align: center;
+  flex-basis: 100%;
+  padding: 1rem 0;
+  @include media-query('sm'){
+    display: block;
+  }
+
+  .icon {
+    width:  1.25rem;
+    height: .55rem;
+  }
+}
+
+.toggle-list ~ label:before  {
+  line-height: 1;
+  text-transform: none;
+  font-size: .68rem;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  color: $text-color;
+  content: "More";
+}
+.toggle-list:checked ~ label:before  {
+  content: "Less";
+}

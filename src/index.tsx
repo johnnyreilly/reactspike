@@ -8,7 +8,7 @@ import { Api } from './api';
 import { Config } from './config';
 import { Dependencies } from './dependencies';
 import { StorageFacade } from './dependencies/storageFacade';
-import './styles/styles.scss';
+import './styles/main.scss';
 
 /**
  * Wire up dependencies which will be used by the app

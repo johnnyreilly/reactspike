@@ -1,0 +1,30 @@
+// -----------------------------------------------------------------------------
+// This file contains the thumbnail styles
+// -----------------------------------------------------------------------------
+
+.thumbnail {
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+}
+
+.tooltip-holder {
+	will-change: width, height, transform;
+  display: block;
+  background-color: #111;
+  position: absolute;
+  right: 7rem;
+  width: 0;
+  text-align: center;
+  height: 0;
+  top: 0;
+  z-index: 10;
+  transform: translate3d(0);
+  transition: all .3s ease;
+//  box-shadow: 0 0 10rem rgba(0,0,0,0.7);
+}
+
+body.desktop .show-image:hover ~ .tooltip-holder {
+  width:  12rem;
+  height: 12rem;
+}

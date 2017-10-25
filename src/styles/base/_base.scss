@@ -1,0 +1,98 @@
+// -----------------------------------------------------------------------------
+// This file contains very basic styles.
+// -----------------------------------------------------------------------------
+
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+  font-family: inherit;
+}
+
+// for sticky footer
+body {
+  font-size: $base-font-size;
+  font-family: $font-family-text;
+  line-height: $base-line-height;
+  color: $text-color;
+  background-color: $background-color;
+  line-height: $base-line-height;
+  margin: 0;
+  padding: 0;
+  text-size-adjust: 100%;
+  word-break: break-word;
+}
+
+h1, h2, h3 {
+  line-height: 1.2;
+  font-weight: $font-weight-regular;
+  color: $heading-text-color;
+  margin: 0 auto calc(#{$global-margin} / 1.5);
+  word-wrap: break-word;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 1rem;
+  font-weight: $font-weight-bold;
+
+  a:visited{
+    color: inherit;
+  }
+}
+
+
+/**
+ * Basic styles for links
+ */
+
+a {
+  color: $brand-color;
+  text-decoration: none;
+  transition: all .1s ease;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  @include on-event {
+    color: $text-color;
+    text-decoration: none;
+  }
+
+  &:visited {
+    color: darken($text-color, 40%);
+  }
+
+  &:hover {
+    color: #fff;
+  }
+
+  &:active {
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  }
+
+}
+
+/**
+ * Responsives
+ */
+
+ img {
+   height: auto;
+   border: 0;
+   border-style: none;
+ }
+
+/**
+ * lists
+ */
+
+ul,ol,li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

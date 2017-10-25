@@ -1,0 +1,168 @@
+// -----------------------------------------------------------------------------
+// This file contains the list styles !
+// -----------------------------------------------------------------------------
+
+.link-section {
+  position: relative;
+  margin-bottom: $global-margin / 2;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  @include media-query('md'){
+    margin-bottom: $global-margin;
+    align-items: baseline;
+  }
+}
+
+/* Headings */
+
+.col-header {
+  padding-left: 1rem;
+  flex: 2;
+  margin: 0;
+
+  a {
+    &:active,
+    &:focus {
+      background-color: transparent;
+      color: lighten($text-color, 100%);
+    }
+  }
+
+}
+
+/* link lists */
+
+.links-list {
+  width: 100%;
+}
+
+.links-list li {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: relative;
+  border-bottom: 1px dotted $border-grey;
+
+  &:first-child {
+    margin-top: $global-margin/2;
+  }
+}
+
+.links-list li:hover {
+  background: rgba(0,0,0,0.1);
+}
+
+
+/* Title */
+
+.story-title {
+  word-break: break-word;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  flex: 1;
+  padding: .5rem 1rem;
+  position: relative;
+}
+
+
+/* Title tooltip */
+@include media-query('md'){
+  .story-title:after {
+    z-index: 2;
+    opacity: 0;
+    position: absolute;
+    content: attr(data-title);
+    font-size: 0.875rem;
+    top: 110%;
+    left: 1rem;
+    padding: $global-margin/3;
+    background-color: lighten($background-color, 10%);
+    box-shadow: .25rem .25rem .25rem darken($background-color, 1%);
+    border-radius: 2px;
+    transform: scale(0);
+  }
+}
+
+.story-title:hover:after {
+ animation-name: show-tooltip;
+ animation-duration: 5s;
+ animation-iteration-count: 1;
+ animation-timing-function: ease-out;
+ animation-delay: 2s;
+}
+
+@keyframes show-tooltip {
+  0%   {opacity: 0; transform: scale(0);}
+  2%   {opacity: 1; transform: scale(1);}
+  98%  {opacity: 1; transform: scale(1);}
+  100% {opacity: 0; transform: scale(0);}
+}
+
+/* Buttons */
+
+.comments,
+.show-image,
+.hide-image  {
+  position: relative;
+  display: block;
+  width: 2.5rem;
+  text-align: center;
+  padding-top: .5rem;
+}
+.show-image,
+.hide-image {
+  position: relative;
+  z-index: 2;
+}
+.full-image {
+  line-height: 0;
+}
+
+/* righthand mode */
+
+.story-title {order: 1;}
+.comments    {order: 3;}
+.show-image  {order: 2;}
+.hide-image  {order: 2;}
+.full-image  {order: 4;}
+
+.hide-image {
+  display: none;
+}
+
+.full-image,
+.full-image img {
+  width: 100%;
+  height: auto;
+}
+
+.comments {
+
+  &:visited .icon {
+    fill: darken($text-color, 40%);
+  }
+}
+
+/* link list special */
+
+.stickied {
+  display: none!important;
+}
+
+.nsfw .story-title:before {
+  content: "NSFW";
+  color: $text-color-danger;
+  font-size: .75rem;
+  font-weight: $font-weight-bold;
+  margin-right: .5rem;
+}
+
+/* video links */
+.video .story-title:before {
+  content: "\25B6";
+  color: $text-color-danger;
+  margin-right: .5em;
+  font-size: .75rem;
+}

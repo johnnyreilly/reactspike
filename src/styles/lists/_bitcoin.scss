@@ -1,0 +1,56 @@
+// -----------------------------------------------------------------------------
+// This file contains the bitcoin styles
+// -----------------------------------------------------------------------------
+
+.bitcoin-section .toggle-list,
+.bitcoin-section .toggler-header,
+.bitcoin-section .toggler-footer {
+  visibility: hidden;
+}
+
+.links-list--bitcoin {
+  font-size: 1.75rem;
+  font-weight: $font-weight-light;
+  display: flex;
+  text-align: center;
+  li {
+    flex-basis: 33.333%;
+    text-align: center;
+
+    &:first-child {
+      text-align: left;
+      margin-top: 0;
+    }
+
+    &:last-child {
+      text-align: right;
+    }
+
+    /* quick hack to hide new yen currency! */
+    &.bitcoin-row--CNY {
+      display: none;
+    }
+
+  }
+
+@include media-query('md'){
+  font-size: 2rem;
+ }
+
+}
+
+.bitcoin-price {
+  padding: 1rem;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  white-space: nowrap;
+
+  .decimal {
+    display: none; // hide for now
+    font-size: 1rem;
+    color: darken($text-color, 30%);
+    letter-spacing: 0
+  }
+}
