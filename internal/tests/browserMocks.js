@@ -1,17 +1,17 @@
-var localStorageMock = (function() {
+var localStorageMock = (function () {
     var store = {};
 
     return {
-        getItem: function(key) {
+        getItem: function (key) {
             return store[key] || null;
         },
-        setItem: function(key, value) {
+        setItem: function (key, value) {
             store[key] = value.toString();
         },
-        removeItem: function(key) {
+        removeItem: function (key) {
             delete this.store[key]
         },
-        clear: function() {
+        clear: function () {
             store = {};
         }
     };
@@ -19,5 +19,10 @@ var localStorageMock = (function() {
 })();
 
 Object.defineProperty(window, 'localStorage', {
-     value: localStorageMock
+    value: localStorageMock
 });
+
+// https://github.com/facebookincubator/create-react-app/issues/3199 cater for react 16 issue
+global.requestAnimationFrame = (cb) => {
+    setTimeout(cb, 0)
+}
