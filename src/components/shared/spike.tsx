@@ -22,30 +22,49 @@ interface ISpikeProps {
   config: IConfig[];
 }
 
-export const SpikePage: React.SFC<ISpikeProps> = ({ config, spikeName, spikeShortName }) => {
-  const col1s = config.filter(item => item.col === '1');
-  const col2s = config.filter(item => item.col === '2');
-  const col3s = config.filter(item => item.col === '3');
-  const allCols = [col1s, col2s, col3s];
+interface IState {
+  autoRefresh: boolean;
+}
 
-  return [
-    <Header key="head" />,
-    <main key="main" className="col-group">
-      {allCols.map(col => (
-        <div className="col">
-          {col.map(item => (
-            <Section
-              itemName={item.name}
-              itemColor={item.color}
-              itemURL={`https://readspike.com/cache_renders/rendered_${item.name}.php`}
-              itemTitle={item.title}
-              itemRow={item.row}
-              spikeShortName={spikeShortName}
-            />
-          ))}
-        </div>
-      ))}
-    </main>,
-    <Footer key="footer" spikeName={spikeName} />
-  ] as any; // HACK UNTIL THIS IS RESOLVED: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20356#issuecomment-336384210
-};
+const AUTOREFRESH = 'autoRefresh';
+
+export class SpikePage extends React.Component<ISpikeProps, IState> {
+  state = {
+    autoRefresh: window.localStorage.getItem(AUTOREFRESH) === 'true'
+  };
+
+  setAutoRefresh = (autoRefresh: boolean) => {
+    window.localStorage.setItem(AUTOREFRESH, autoRefresh ? 'true' : 'false');
+    this.setState(_prevState => ({ autoRefresh }));
+  }
+
+  render() {
+    const { config, spikeName, spikeShortName } = this.props;
+    const col1s = config.filter(item => item.col === '1');
+    const col2s = config.filter(item => item.col === '2');
+    const col3s = config.filter(item => item.col === '3');
+    const allCols = [col1s, col2s, col3s];
+
+    return [
+      <Header key="head" />,
+      <main key="main" className="col-group">
+        {allCols.map((col, index) => (
+          <div key={index} className="col">
+            {col.map(item => (
+              <Section
+                key={item.name}
+                itemName={item.name}
+                itemColor={item.color}
+                itemURL={`https://readspike.com/cache_renders/rendered_${item.name}.php`}
+                itemTitle={item.title}
+                itemRow={item.row}
+                spikeShortName={spikeShortName}
+              />
+            ))}
+          </div>
+        ))}
+      </main>,
+      <Footer key="footer" spikeName={spikeName} autoRefresh={this.state.autoRefresh} setAutoRefresh={this.setAutoRefresh} />
+    ];
+  }
+}

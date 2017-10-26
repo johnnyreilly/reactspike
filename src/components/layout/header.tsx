@@ -78,7 +78,7 @@ export class Header extends React.Component<Partial<IHeaderProps>> {
                         </label>
                     <ul className="main-nav__items">
                         {this.publicLinks.map(({ path, title }) => (
-                            <li key={path}>
+                            <li key={title}>
                                 <Link to={path}>{title}</Link>
                             </li>
                         ))}
