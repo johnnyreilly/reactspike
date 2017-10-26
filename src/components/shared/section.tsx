@@ -11,28 +11,43 @@ interface ISectionProps {
 
 interface IState {
     html: string;
+    error: string;
     loading: boolean;
 }
 
 export class Section extends React.Component<ISectionProps, IState> {
     state = {
         html: undefined as string,
+        error: undefined as string,
         loading: false
     };
 
     componentDidMount() {
+        this.loadData();
+        
+        // refresh once a minute
+        setInterval(() => this.loadData(), 60000);
+    }
+
+    loadData() {
         this.setState(_prevState => ({ loading: true }));
         fetch(this.props.itemURL)
             .then(value => {
                 if (value.ok) {
                     value.text()
-                        .then(html => this.setState(_prevState => ({ html, loading: false })))
-                        .catch(error => this.setState(_prevState => ({ html: `error... ${JSON.stringify(error)}`, loading: false })));
+                        .then(html => {
+                            this.setState(_prevState => ({ html, loading: false }));
+                        })
+                        .catch(error => {
+                            this.setState(_prevState => ({ error: JSON.stringify(error), loading: false }));
+                        });
                 } else {
-                    this.setState(_prevState => ({ html: `error... ${value.statusText}`, loading: false }));
+                    this.setState(_prevState => ({ error: value.statusText, loading: false }));
                 }
             })
-            .catch(error => this.setState(_prevState => ({ html: `error... ${JSON.stringify(error)}`, loading: false })));
+            .catch(error => {
+                this.setState(_prevState => ({ error: JSON.stringify(error), loading: false }));
+            });
     }
 
     render() {
@@ -56,11 +71,11 @@ export class Section extends React.Component<ISectionProps, IState> {
                                 dangerouslySetInnerHTML={{ __html: this.state.html }}
                             />
                         )
-                        : this.state.loading ? <strong>LOADING</strong> : <strong>...</strong>
+                        : this.state.loading ? <strong>LOADING</strong> : <strong>{this.state.error}</strong>
                 }
                 
                 <label htmlFor={id} className="toggler-footer" style={{ opacity: 0 }}>Show/hide
-            <svg className="icon"><use xlinkHref="#icon_arrow" /></svg>
+                <svg className="icon"><use xlinkHref="#icon_arrow" /></svg>
                 </label>
             </section>
         );
