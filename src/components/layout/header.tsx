@@ -5,7 +5,8 @@ import {
     Link
 } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
-import { homePath } from '../features/home/index';
+import { homePath } from '../features/home';
+import { worldPath } from '../features/world';
 
 interface IHeaderProps extends RouteComponentProps<{}> {
 }
@@ -15,7 +16,7 @@ export class Header extends React.Component<Partial<IHeaderProps>> {
 
     publicLinks = [
         { path: homePath, className: 's-home', title: 'Home' },
-        { path: homePath, className: 's-world', title: 'World' },
+        { path: worldPath, className: 's-world', title: 'World' },
         { path: homePath, className: 's-london', title: 'London' },
         { path: homePath, className: 's-brighton', title: 'Brighton' },
         { path: homePath, className: 's-funny', title: 'Funny' },
@@ -63,7 +64,11 @@ export class Header extends React.Component<Partial<IHeaderProps>> {
                         Show menu
                         </label>
                     <ul className="main-nav__items">
-                        {this.publicLinks.map(({ path, title }) => <li key={path}><Link to={path}>{title}</Link></li>)}
+                    {this.publicLinks.map(({ path, title }) => (
+                        <li key={path}>
+                            <Link to={path}>{title}</Link>
+                        </li>
+                    ))}
                     </ul>
                 </nav>
 

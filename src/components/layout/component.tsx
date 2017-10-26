@@ -8,6 +8,7 @@ import {
 import { Header } from './header';
 import { publicRoutes } from './routes';
 import { NotFound } from '../shared/notFound';
+import { Footer } from './footer';
 
 interface ILayoutProps extends RouteComponentProps<{}> {
 }
@@ -20,12 +21,15 @@ export class Layout extends React.Component<Partial<ILayoutProps>> {
     )
 
     render() {
+        const { location } = this.props;
+
         return [
             <Header key="head" />,
             <Switch key="main">
                 {publicRoutes.map(this.renderRoute)}
                 <Route component={NotFound} />
-            </Switch>
+            </Switch>,
+            <Footer key="footer" spikeName={location.pathname} />
         ];
     }
 }
