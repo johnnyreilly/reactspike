@@ -5,27 +5,22 @@ import {
     Link
 } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
-import { observer } from 'mobx-react';
 import { homePath } from '../features/home/index';
-import { dataPath } from '../features/data/index';
-import { fxRatesPath } from '../features/fxRates/index';
-import { aboutPath } from '../features/about/index';
 
 interface IHeaderProps extends RouteComponentProps<{}> {
 }
 
 @withRouter
-@observer
 export class Header extends React.Component<Partial<IHeaderProps>> {
 
     publicLinks = [
         { path: homePath, className: 's-home', title: 'Home' },
-        { path: dataPath, className: 's-world', title: 'World' },
-        { path: fxRatesPath, className: 's-london', title: 'London' },
-        { path: aboutPath, className: 's-brighton', title: 'Brighton' },
-        { path: fxRatesPath, className: 's-funny', title: 'Funny' },
-        { path: aboutPath, className: 's-webdev', title: 'WebDev' },
-        { path: fxRatesPath, className: 's-home', title: 'Feedback' },
+        { path: homePath, className: 's-world', title: 'World' },
+        { path: homePath, className: 's-london', title: 'London' },
+        { path: homePath, className: 's-brighton', title: 'Brighton' },
+        { path: homePath, className: 's-funny', title: 'Funny' },
+        { path: homePath, className: 's-webdev', title: 'WebDev' },
+        { path: homePath, className: 's-home', title: 'Feedback' },
     ];
 
     render() {
