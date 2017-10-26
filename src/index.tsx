@@ -9,7 +9,7 @@ import './styles/main.scss';
  * Render the app
  */
 function render(Component: React.SFC) {
-    const rootEl = document.getElementById('top');
+    const rootEl = document.getElementById('root');
     ReactDOM.render(
         <AppContainer>
             <Router>

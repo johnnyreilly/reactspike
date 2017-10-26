@@ -2,36 +2,52 @@ import * as React from 'react';
 
 interface ISectionProps {
     itemColor: string;
-    itemURL: string;
+    itemUrl: string;
+    itemHtmlUrl: string;
     itemName: string;
     itemTitle: string;
     itemRow: string;
     spikeShortName: string;
+    autoRefresh: boolean;
 }
 
 interface IState {
     html: string;
     error: string;
     loading: boolean;
+    intervalHandle?: number;
 }
 
 export class Section extends React.Component<ISectionProps, IState> {
-    state = {
-        html: undefined as string,
-        error: undefined as string,
-        loading: false
-    };
+    constructor(props: ISectionProps) {
+        super(props);
+        this.state = {
+            html: undefined as string,
+            error: undefined as string,
+            loading: false
+        };
+    }
 
     componentDidMount() {
         this.loadData();
-        
+
         // refresh once a minute
-        setInterval(() => this.loadData(), 60000);
+        if (this.props.autoRefresh) {
+            const intervalHandle = window.setInterval(() => this.loadData(), 60000);
+            this.setState(_prevState => ({ intervalHandle }));
+        }
+    }
+
+    componentWillReceiveProps(nextProps: ISectionProps) {
+        if (nextProps.autoRefresh && !this.props.autoRefresh) {
+            window.clearInterval(this.state.intervalHandle);
+            this.setState(_prevState => ({ intervalHandle: undefined }));
+        }
     }
 
     loadData() {
         this.setState(_prevState => ({ loading: true }));
-        fetch(this.props.itemURL)
+        fetch(this.props.itemHtmlUrl)
             .then(value => {
                 if (value.ok) {
                     value.text()
@@ -51,20 +67,20 @@ export class Section extends React.Component<ISectionProps, IState> {
     }
 
     render() {
-        const { itemColor, itemURL, itemName, itemTitle, itemRow, spikeShortName } = this.props;
+        const { itemColor, itemUrl, itemName, itemTitle, itemRow, spikeShortName } = this.props;
 
         const itemNameLower = itemName.toLocaleLowerCase();
         const id = `toggler-${spikeShortName}-${itemNameLower}`;
         return (
             <section className={`link-section ${itemNameLower}-section`} data-order={itemRow}>
-                <h2 className="col-header"><a href={itemURL}>
+                <h2 className="col-header"><a href={itemUrl}>
                     <svg className="logo-readspike" style={{ fill: itemColor }}><use xlinkHref="#logo_readspike" /></svg>
                     {itemTitle}
                 </a></h2>
                 <input type="checkbox" className="toggle-list" id={id} />
                 <label htmlFor={id} className="toggler-header" style={{ opacity: 0 }}>Show/hide</label>
-                { 
-                    this.state.html 
+                {
+                    this.state.html
                         ? (
                             <ol
                                 className={`links-list links-list--${itemNameLower}`}
@@ -73,7 +89,7 @@ export class Section extends React.Component<ISectionProps, IState> {
                         )
                         : this.state.loading ? <strong>LOADING</strong> : <strong>{this.state.error}</strong>
                 }
-                
+
                 <label htmlFor={id} className="toggler-footer" style={{ opacity: 0 }}>Show/hide
                 <svg className="icon"><use xlinkHref="#icon_arrow" /></svg>
                 </label>

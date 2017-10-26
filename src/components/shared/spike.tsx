@@ -55,10 +55,12 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
                 key={item.name}
                 itemName={item.name}
                 itemColor={item.color}
-                itemURL={`https://readspike.com/cache_renders/rendered_${item.name}.php`}
+                itemUrl={item.url}
                 itemTitle={item.title}
                 itemRow={item.row}
+                itemHtmlUrl={`https://readspike.com/cache_renders/rendered_${item.name}.php`}
                 spikeShortName={spikeShortName}
+                autoRefresh={this.state.autoRefresh}
               />
             ))}
           </div>

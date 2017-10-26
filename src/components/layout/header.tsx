@@ -10,7 +10,11 @@ import { homePath } from '../features/home';
 import { worldPath } from '../features/world';
 
 interface IHeaderProps extends RouteComponentProps<{}> {
+    spikeHeaderBG: string;
     spikeURL: string;
+    spikeTitle: string;
+    spikeShortName: string;
+    spikeName: string;
 }
 
 @withRouter
@@ -27,6 +31,7 @@ export class Header extends React.Component<Partial<IHeaderProps>> {
     ];
 
     render() {
+        const { spikeHeaderBG, spikeURL, spikeShortName, spikeTitle, spikeName } = this.props;
         return (
             <header className="main-header">
 
@@ -35,7 +40,7 @@ export class Header extends React.Component<Partial<IHeaderProps>> {
                         JSON.stringify({
                             "@context": "http://schema.org",
                             "@type": "Organization",
-                            "url": this.props.spikeURL,
+                            "url": spikeURL,
                             "logo": "https://readspike.com/assets/img/readspike_logo_1200x630.png",
                             "sameAs": "https://twitter.com/readspike"
                         })
@@ -61,13 +66,13 @@ export class Header extends React.Component<Partial<IHeaderProps>> {
                 </svg>
 
                 <a href="" className="logo-link" target="_self">
-                    <svg className="logo-readspike" style={{ fill: '#fff' }}>><use xlinkHref="#logo_readspike" /></svg>
+                    <svg className="logo-readspike" style={{ fill: spikeHeaderBG }}>><use xlinkHref="#logo_readspike" /></svg>
 
-                    Readspike <span style={{ color: '#fff' }}></span>
+                    Readspike <span style={{ color: spikeHeaderBG }}>{spikeShortName}</span>
 
                 </a>
 
-                <h1 className="logo-header">Readspike - Simple news aggregator</h1>
+                <h1 className="logo-header">{spikeName} - {spikeTitle}</h1>
 
                 <nav className="main-nav" role="navigation">
                     <input type="checkbox" className="main-nav__checkbox" id="toggle-nav" />
