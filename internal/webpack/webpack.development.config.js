@@ -33,7 +33,7 @@ const main = [
     'react-hot-loader/patch',
     './src/index.tsx'
 ];
-const vendor = shared.makeVendorEntry({ mainModules: main, modulesToExclude: ['semantic-ui-css'] })
+const vendor = shared.makeVendorEntry({ mainModules: main, modulesToExclude: [] })
 
 module.exports = {
     context: process.cwd(), // to automatically find tsconfig.json

@@ -5,6 +5,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const shared = require('./shared');
 const main = [
@@ -12,7 +13,7 @@ const main = [
     'whatwg-fetch',
     './src/index.tsx'
 ];
-const vendor = shared.makeVendorEntry({ mainModules: main, modulesToExclude: ['semantic-ui-css'] })
+const vendor = shared.makeVendorEntry({ mainModules: main, modulesToExclude: [] })
 
 module.exports = {
     context: process.cwd(), // to automatically find tsconfig.json
@@ -39,10 +40,10 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production'),
-            'process.env.API_BASE_URL': JSON.stringify('#{ApiBaseUrl}'),
-            'process.env.APP_BASE_URL': JSON.stringify('#{AppBaseUrl}'),
-            'process.env.LOGIN_APP_BASE_URL': JSON.stringify('#{LoginAppBaseUrl}'),
-            'process.env.LOGIN_API_BASE_URL': JSON.stringify('#{LoginApiBaseUrl}'),
+            'process.env.API_BASE_URL': JSON.stringify(''),
+            'process.env.APP_BASE_URL': JSON.stringify(''),
+            'process.env.LOGIN_APP_BASE_URL': JSON.stringify(''),
+            'process.env.LOGIN_API_BASE_URL': JSON.stringify(''),
         }),
         new HtmlWebpackPlugin({
             hash: true,
@@ -61,6 +62,7 @@ module.exports = {
                 minifyURLs: true,
             },
         }),
+        new ExtractTextPlugin({ filename: 'style.css', allChunks: true })
     ],
     module: {
         rules: [
@@ -81,20 +83,21 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: [
-                    { loader: 'style-loader' },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: false,
-                            camelCase: true,
-                            importLoaders: 2,
-                            minimize: true
-                        }
-                    },
-                    { loader: 'resolve-url-loader' },
-                    { loader: "sass-loader?sourceMap" }
-                ]
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [{
+                            loader: 'css-loader',
+                            options: {
+                                modules: false,
+                                camelCase: true,
+                                importLoaders: 2,
+                                minimize: true
+                            }
+                        },
+                        { loader: 'resolve-url-loader' },
+                        { loader: "sass-loader?sourceMap" }
+                    ]
+                })
             },
             {
                 test: /\.svg/,
@@ -104,15 +107,6 @@ module.exports = {
                         noquotes: false
                     }
                 }
-            },
-            {
-            test: /\.css$/,
-                use: [
-                    { loader: 'style-loader' },
-                    {
-                        loader: 'css-loader',
-                    },
-                ]
             },
             {
                 test: /\.jpe?g$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.woff2$|\.eot$|\.ttf$|\.wav$|\.mp3$/,
