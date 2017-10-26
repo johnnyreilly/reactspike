@@ -2,13 +2,13 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { SpikePage, IConfig } from '../../shared/spike';
 
-// const spikeName        = 'Readspike';
-const spikeShortName   = '';
+const spikeName = 'Readspike';
+const spikeShortName = '';
 // const spikeTitle       = 'Simple news aggregator';
 // const spikeDescription = 'Aggregating the news from around the web every minute';
 // const spikeHeaderBG    = '#fff';
 // const spikeBodyBG      = '#1a1c20';
-// const spikeURl         = 'https://readspike.com/';
+const spikeURL = 'https://readspike.com/';
 // const spikePath        = __DIR__ ;
 
 const config: IConfig[] = [
@@ -279,5 +279,10 @@ const config: IConfig[] = [
 ];
 
 export const HomePage: React.SFC<RouteComponentProps<{}>> = _props => (
-  <SpikePage spikeShortName={spikeShortName} config={config} />
+  <SpikePage
+    spikeName={spikeName}
+    spikeShortName={spikeShortName}
+    spikeURL={spikeURL}
+    config={config}
+  />
 );

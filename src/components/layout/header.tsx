@@ -1,4 +1,5 @@
 // tslint:disable:max-line-length
+// tslint:disable:quotemark
 import * as React from 'react';
 import {
     withRouter,
@@ -9,6 +10,7 @@ import { homePath } from '../features/home';
 import { worldPath } from '../features/world';
 
 interface IHeaderProps extends RouteComponentProps<{}> {
+    spikeURL: string;
 }
 
 @withRouter
@@ -28,7 +30,18 @@ export class Header extends React.Component<Partial<IHeaderProps>> {
         return (
             <header className="main-header">
 
-                <svg xmlns="http://www.w3.org/2000/svg" style={{display: 'none'}}>
+                <script type="application/ld+json">
+                    {
+                        JSON.stringify({
+                            "@context": "http://schema.org",
+                            "@type": "Organization",
+                            "url": this.props.spikeURL,
+                            "logo": "https://readspike.com/assets/img/readspike_logo_1200x630.png",
+                            "sameAs": "https://twitter.com/readspike"
+                        })
+                    }
+                </script>
+                <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
                     <symbol id="icon_x" viewBox="0 0 18 18">
                         <title>Close x</title>
                         <polygon points="16.43 3.7 14.3 1.57 9 6.88 3.7 1.57 1.57 3.7 6.88 9 1.57 14.3 3.7 16.43 9 11.12 14.3 16.43 16.43 14.3 11.12 9 16.43 3.7" />
@@ -64,11 +77,11 @@ export class Header extends React.Component<Partial<IHeaderProps>> {
                         Show menu
                         </label>
                     <ul className="main-nav__items">
-                    {this.publicLinks.map(({ path, title }) => (
-                        <li key={path}>
-                            <Link to={path}>{title}</Link>
-                        </li>
-                    ))}
+                        {this.publicLinks.map(({ path, title }) => (
+                            <li key={path}>
+                                <Link to={path}>{title}</Link>
+                            </li>
+                        ))}
                     </ul>
                 </nav>
 
