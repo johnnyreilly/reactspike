@@ -4,6 +4,8 @@
 
 Reacting the ReadSpike...  To access the app go here: https://johnnyreilly.github.io/reactspike/
 
+All changes to the repo are built on Travis and deployed to GitHub Pages.
+
 ## Getting started
 
 Follow these instructions to get the front end app up and running
