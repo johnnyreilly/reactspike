@@ -22,7 +22,7 @@ export class Section extends React.Component<ISectionProps, IState> {
     constructor(props: ISectionProps) {
         super(props);
         this.state = {
-            html: undefined as string,
+            html: window.localStorage.getItem(props.itemHtmlUrl),
             error: undefined as string,
             loading: false
         };
@@ -46,13 +46,15 @@ export class Section extends React.Component<ISectionProps, IState> {
     }
 
     loadData() {
+        const { itemHtmlUrl } = this.props;
         this.setState(_prevState => ({ loading: true }));
-        fetch(this.props.itemHtmlUrl)
+        fetch(itemHtmlUrl)
             .then(value => {
                 if (value.ok) {
                     value.text()
                         .then(html => {
                             this.setState(_prevState => ({ html, loading: false }));
+                            window.localStorage.setItem(itemHtmlUrl, html);
                         })
                         .catch(error => {
                             this.setState(_prevState => ({ error: error.message ? error.message : error, loading: false }));

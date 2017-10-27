@@ -36,7 +36,7 @@ const AUTOREFRESH = 'autoRefresh';
 export class SpikePage extends React.Component<ISpikeProps, IState> {
   state = {
     autoRefresh: window.localStorage.getItem(AUTOREFRESH) === 'true'
-  };
+  } as IState;
 
   setAutoRefresh = (autoRefresh: boolean) => {
     window.localStorage.setItem(AUTOREFRESH, autoRefresh ? 'true' : 'false');
