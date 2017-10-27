@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { HashRouter as Router } from 'react-router-dom';
 import { AppContainer } from 'react-hot-loader';
 import { App } from './app';
+import registerServiceWorker from './registerServiceWorker';
 import './styles/main.scss';
 
 /**
@@ -21,6 +22,7 @@ function render(Component: React.SFC) {
 }
 
 render(App);
+registerServiceWorker();
 
 // Hot Module Replacement API
 if ((module as any).hot) {

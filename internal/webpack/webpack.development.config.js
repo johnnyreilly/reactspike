@@ -61,6 +61,7 @@ module.exports = {
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('development'),
+            'process.env.PUBLIC_URL': JSON.stringify(''),
             'process.env.API_BASE_URL': JSON.stringify('http://localhost:5000'),
             'process.env.APP_BASE_URL': JSON.stringify('http://localhost:8080'),
             'process.env.LOGIN_APP_BASE_URL': JSON.stringify('http://localhost:8080'),

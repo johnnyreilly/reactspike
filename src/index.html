@@ -6,22 +6,6 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
     <title>Readspike - Simple news aggregator</title>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                // only exists in prod
-                navigator.serviceWorker.register('/sw.js', { scope: '/' })
-                    .then(function () {
-                        console.log('Service Worker Registered');
-                    }, function () {
-                        console.log('No Service Worker to Register');
-                    });
-                navigator.serviceWorker.ready.then(function () {
-                    console.log('Service Worker Ready');
-                });
-            });
-        }
-    </script>
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="blackspike.com">

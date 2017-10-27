@@ -36,6 +36,7 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production'),
+            'process.env.PUBLIC_URL': JSON.stringify('' /*'https://johnnyreilly.github.io/reactspike/'*/),
             'process.env.API_BASE_URL': JSON.stringify(''),
             'process.env.APP_BASE_URL': JSON.stringify(''),
             'process.env.LOGIN_APP_BASE_URL': JSON.stringify(''),
