@@ -1,14 +1,16 @@
 import * as React from 'react';
 
 interface ISectionProps {
-    itemColor: string;
-    itemUrl: string;
-    itemHtmlUrl: string;
-    itemName: string;
-    itemTitle: string;
-    itemRow: string;
+    sectionUrl: string;
+    sectionColor: string;
+    sectionHtmlUrl: string;
+    sectionName: string;
+    sectionTitle: string;
+    sectionRow: string;
     spikeShortName: string;
     autoRefresh: boolean;
+    moreOrLessChecked: boolean;
+    setMoreOrLessChecked: (sectionUrl: string, moreOrLessChecked: boolean) => void;
 }
 
 interface IState {
@@ -22,7 +24,7 @@ export class Section extends React.Component<ISectionProps, IState> {
     constructor(props: ISectionProps) {
         super(props);
         this.state = {
-            html: window.localStorage.getItem(props.itemHtmlUrl),
+            html: window.localStorage.getItem(props.sectionHtmlUrl),
             error: undefined as string,
             loading: false
         };
@@ -46,15 +48,15 @@ export class Section extends React.Component<ISectionProps, IState> {
     }
 
     loadData() {
-        const { itemHtmlUrl } = this.props;
+        const { sectionHtmlUrl } = this.props;
         this.setState(_prevState => ({ loading: true }));
-        fetch(itemHtmlUrl)
+        fetch(sectionHtmlUrl)
             .then(value => {
                 if (value.ok) {
                     value.text()
                         .then(html => {
                             this.setState(_prevState => ({ html, loading: false }));
-                            window.localStorage.setItem(itemHtmlUrl, html);
+                            window.localStorage.setItem(sectionHtmlUrl, html);
                         })
                         .catch(error => {
                             this.setState(_prevState => ({ error: error.message ? error.message : error, loading: false }));
@@ -68,24 +70,28 @@ export class Section extends React.Component<ISectionProps, IState> {
             });
     }
 
-    render() {
-        const { itemColor, itemUrl, itemName, itemTitle, itemRow, spikeShortName } = this.props;
+    moreOrLess = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.props.setMoreOrLessChecked(this.props.sectionHtmlUrl, event.target.checked);
+    }
 
-        const itemNameLower = itemName.toLocaleLowerCase();
-        const id = `toggler-${spikeShortName}-${itemNameLower}`;
+    render() {
+        const { sectionColor, sectionUrl, sectionName, sectionTitle, sectionRow, spikeShortName, moreOrLessChecked } = this.props;
+
+        const sectionNameLower = sectionName.toLocaleLowerCase();
+        const id = `toggler-${spikeShortName}-${sectionNameLower}`;
         return (
-            <section className={`link-section ${itemNameLower}-section`} data-order={itemRow}>
-                <h2 className="col-header"><a href={itemUrl}>
-                    <svg className="logo-readspike" style={{ fill: itemColor }}><use xlinkHref="#logo_readspike" /></svg>
-                    {itemTitle}
+            <section className={`link-section ${sectionNameLower}-section`} data-order={sectionRow}>
+                <h2 className="col-header"><a href={sectionUrl}>
+                    <svg className="logo-readspike" style={{ fill: sectionColor }}><use xlinkHref="#logo_readspike" /></svg>
+                    {sectionTitle}
                 </a></h2>
-                <input type="checkbox" className="toggle-list" id={id} />
+                <input type="checkbox" className="toggle-list" id={id} onChange={this.moreOrLess} checked={moreOrLessChecked} />
                 <label htmlFor={id} className="toggler-header fadeInTogglers" style={{ opacity: 0 }}>Show/hide</label>
                 {
                     this.state.html
                         ? (
                             <ol
-                                className={`links-list links-list--${itemNameLower}`}
+                                className={`links-list links-list--${sectionNameLower}`}
                                 dangerouslySetInnerHTML={{ __html: this.state.html }}
                             />
                         )
