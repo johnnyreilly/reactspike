@@ -3,7 +3,7 @@ import { Section } from './section';
 import { Header } from '../layout/header';
 import { Footer } from '../layout/footer';
 
-export interface IConfig {
+export interface ISectionConfig {
   name: string;
   title: string;
   type: string;
@@ -15,11 +15,16 @@ export interface IConfig {
   feed: string;
 }
 
-interface ISpikeProps {
+export interface ISpikeProps {
   spikeName: string;
   spikeShortName: string;
   spikeURL: string;
-  config: IConfig[];
+  spikeTitle: string;
+  spikeDescription: string;
+  spikeHeaderBG: string;
+  spikeBodyBG: string;
+
+  sectionConfig: ISectionConfig[];
 }
 
 interface IState {
@@ -39,14 +44,21 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
   }
 
   render() {
-    const { config, spikeName, spikeShortName } = this.props;
-    const col1s = config.filter(item => item.col === '1');
-    const col2s = config.filter(item => item.col === '2');
-    const col3s = config.filter(item => item.col === '3');
+    const { spikeName, spikeShortName, spikeURL, spikeHeaderBG, spikeTitle, sectionConfig } = this.props;
+    const col1s = sectionConfig.filter(item => item.col === '1');
+    const col2s = sectionConfig.filter(item => item.col === '2');
+    const col3s = sectionConfig.filter(item => item.col === '3');
     const allCols = [col1s, col2s, col3s];
 
     return [
-      <Header key="head" />,
+      <Header
+        key="head"
+        spikeName={spikeName}
+        spikeShortName={spikeShortName}
+        spikeTitle={spikeTitle}
+        spikeHeaderBG={spikeHeaderBG}
+        spikeURL={spikeURL}
+      />,
       <main key="main" className="col-group">
         {allCols.map((col, index) => (
           <div key={index} className="col">
@@ -55,7 +67,7 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
                 key={item.name}
                 itemName={item.name}
                 itemColor={item.color}
-                itemUrl={item.url}
+                itemUrl={spikeURL}
                 itemTitle={item.title}
                 itemRow={item.row}
                 itemHtmlUrl={`https://readspike.com/cache_renders/rendered_${item.name}.php`}

@@ -1,15 +1,11 @@
 // tslint:disable:max-line-length
 // tslint:disable:quotemark
 import * as React from 'react';
-import {
-    withRouter,
-    Link
-} from 'react-router-dom';
-import { RouteComponentProps } from 'react-router';
+import { Link } from 'react-router-dom';
 import { homePath } from '../features/home';
 import { worldPath } from '../features/world';
 
-interface IHeaderProps extends RouteComponentProps<{}> {
+interface IHeaderProps {
     spikeHeaderBG: string;
     spikeURL: string;
     spikeTitle: string;
@@ -17,8 +13,7 @@ interface IHeaderProps extends RouteComponentProps<{}> {
     spikeName: string;
 }
 
-@withRouter
-export class Header extends React.Component<Partial<IHeaderProps>> {
+export class Header extends React.Component<IHeaderProps> {
 
     publicLinks = [
         { path: homePath, className: 's-home', title: 'Home' },

@@ -55,14 +55,14 @@ export class Section extends React.Component<ISectionProps, IState> {
                             this.setState(_prevState => ({ html, loading: false }));
                         })
                         .catch(error => {
-                            this.setState(_prevState => ({ error: JSON.stringify(error), loading: false }));
+                            this.setState(_prevState => ({ error: error.message ? error.message : error, loading: false }));
                         });
                 } else {
                     this.setState(_prevState => ({ error: value.statusText, loading: false }));
                 }
             })
             .catch(error => {
-                this.setState(_prevState => ({ error: JSON.stringify(error), loading: false }));
+                this.setState(_prevState => ({ error: error.message ? error.message : error, loading: false }));
             });
     }
 
@@ -78,7 +78,7 @@ export class Section extends React.Component<ISectionProps, IState> {
                     {itemTitle}
                 </a></h2>
                 <input type="checkbox" className="toggle-list" id={id} />
-                <label htmlFor={id} className="toggler-header" style={{ opacity: 0 }}>Show/hide</label>
+                <label htmlFor={id} className="toggler-header fadeInTogglers" style={{ opacity: 0 }}>Show/hide</label>
                 {
                     this.state.html
                         ? (
@@ -90,7 +90,7 @@ export class Section extends React.Component<ISectionProps, IState> {
                         : this.state.loading ? <strong>LOADING</strong> : <strong>{this.state.error}</strong>
                 }
 
-                <label htmlFor={id} className="toggler-footer" style={{ opacity: 0 }}>Show/hide
+                <label htmlFor={id} className="toggler-footer fadeInTogglers" style={{ opacity: 0 }}>Show/hide
                 <svg className="icon"><use xlinkHref="#icon_arrow" /></svg>
                 </label>
             </section>
