@@ -6,27 +6,23 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
-const shared = require('./shared');
-const main = [
-    'core-js',
-    'whatwg-fetch',
-    './src/index.tsx'
-];
-const vendor = shared.makeVendorEntry({ mainModules: main, modulesToExclude: [] })
-
+const DIST_DIR = 'dist';
 module.exports = {
     context: process.cwd(), // to automatically find tsconfig.json
     entry: {
-        main: main,
-        vendor: vendor
+        main: [
+            'core-js',
+            'whatwg-fetch',
+            './src/index.tsx'
+        ]
     },
     output: {
-        path: path.join(process.cwd(), 'dist'),
+        path: path.join(process.cwd(), DIST_DIR),
         filename: '[name].js',
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js' }),
         new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
         new ForkTsCheckerWebpackPlugin({
             async: false,
@@ -46,7 +42,7 @@ module.exports = {
             'process.env.LOGIN_API_BASE_URL': JSON.stringify(''),
         }),
         new HtmlWebpackPlugin({
-            hash: true,
+            // hash: true,
             inject: true,
             template: 'src/index.html',
             minify: {
@@ -62,7 +58,12 @@ module.exports = {
                 minifyURLs: true,
             },
         }),
-        new ExtractTextPlugin({ filename: 'style.css', allChunks: true })
+        new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
+        new WorkboxPlugin({
+            globDirectory: DIST_DIR,
+            globPatterns: ['**/*.{html,js,css}'],
+            swDest: path.join(DIST_DIR, 'sw.js'),
+        }),
     ],
     module: {
         rules: [
@@ -86,16 +87,16 @@ module.exports = {
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [{
-                            loader: 'css-loader',
-                            options: {
-                                modules: false,
-                                camelCase: true,
-                                importLoaders: 2,
-                                minimize: true
-                            }
-                        },
-                        { loader: 'resolve-url-loader' },
-                        { loader: "sass-loader?sourceMap" }
+                        loader: 'css-loader',
+                        options: {
+                            modules: false,
+                            camelCase: true,
+                            importLoaders: 2,
+                            minimize: true
+                        }
+                    },
+                    { loader: 'resolve-url-loader' },
+                    { loader: "sass-loader?sourceMap" }
                     ]
                 })
             },
