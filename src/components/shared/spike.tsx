@@ -18,7 +18,7 @@ export interface ISectionConfig {
 export interface ISpikeProps {
   spikeName: string;
   spikeShortName: string;
-  spikeURL: string;
+  spikeUrl: string;
   spikeTitle: string;
   spikeDescription: string;
   spikeHeaderBG: string;
@@ -39,7 +39,7 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
     super(props);
     this.state = {
       autoRefresh: window.localStorage.getItem(AUTOREFRESH) === 'true',
-      moreOrLessChecked: JSON.parse(window.localStorage.getItem(`${this.props.spikeURL}_moreOrLessChecked`) || '{}')
+      moreOrLessChecked: JSON.parse(window.localStorage.getItem(`${this.props.spikeUrl}_moreOrLessChecked`) || '{}')
     };
 }
 
@@ -50,12 +50,12 @@ setAutoRefresh = (autoRefresh: boolean) => {
 
 setMoreOrLessChecked = (sectionUrl: string, moreOrLessChecked: boolean) => {
   const allMoreOrLessChecked = Object.assign({ [sectionUrl]: moreOrLessChecked }, this.state.moreOrLessChecked);
-  window.localStorage.setItem(`${this.props.spikeURL}_moreOrLessChecked`, JSON.stringify(allMoreOrLessChecked));
+  window.localStorage.setItem(`${this.props.spikeUrl}_moreOrLessChecked`, JSON.stringify(allMoreOrLessChecked));
   this.setState(_prevState => ({ moreOrLessChecked: allMoreOrLessChecked }));
 }
 
 render() {
-    const { spikeName, spikeShortName, spikeURL, spikeHeaderBG, spikeTitle } = this.props;
+    const { spikeName, spikeShortName, spikeUrl, spikeHeaderBG, spikeTitle } = this.props;
     const col1s = this.props.sectionConfig.filter(section => section.col === '1');
     const col2s = this.props.sectionConfig.filter(section => section.col === '2');
     const col3s = this.props.sectionConfig.filter(section => section.col === '3');
@@ -68,7 +68,7 @@ render() {
         spikeShortName={spikeShortName}
         spikeTitle={spikeTitle}
         spikeHeaderBG={spikeHeaderBG}
-        spikeURL={spikeURL}
+        spikeUrl={spikeUrl}
       />,
       <main key="main" className="col-group">
         {allCols.map((col, index) => (
@@ -81,7 +81,7 @@ render() {
                 sectionTitle={sectionConfig.title}
                 sectionRow={sectionConfig.row}
                 sectionUrl={sectionConfig.url}
-                sectionHtmlUrl={`https://readspike.com/cache_renders/rendered_${sectionConfig.name}.php`}
+                sectionHtmlUrl={`${spikeUrl}cache_renders/rendered_${sectionConfig.name}.php`}
                 spikeShortName={spikeShortName}
                 autoRefresh={this.state.autoRefresh}
                 moreOrLessChecked={this.state.moreOrLessChecked[sectionConfig.url]}

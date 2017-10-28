@@ -7,7 +7,7 @@ export const spikeConfig: ISpikeProps = {
     spikeDescription: 'Aggregating the news from around the web every minute',
     spikeHeaderBG: '#fff',
     spikeBodyBG: '#1a1c20',
-    spikeURL: 'https://readspike.com/',
+    spikeUrl: 'https://readspike.com/',
     // const spikePath        = __DIR__ ;
     sectionConfig: [
         {

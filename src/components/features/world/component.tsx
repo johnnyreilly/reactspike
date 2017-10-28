@@ -7,7 +7,7 @@ export const WorldPage: React.SFC<RouteComponentProps<{}>> = _props => (
   <SpikePage
     spikeName={spikeConfig.spikeName}
     spikeShortName={spikeConfig.spikeShortName}
-    spikeURL={spikeConfig.spikeURL}
+    spikeUrl={spikeConfig.spikeUrl}
     spikeTitle={spikeConfig.spikeTitle}
     spikeBodyBG={spikeConfig.spikeBodyBG}
     spikeHeaderBG={spikeConfig.spikeHeaderBG}

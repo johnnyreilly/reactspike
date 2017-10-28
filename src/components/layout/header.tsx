@@ -7,7 +7,7 @@ import { worldPath } from '../features/world';
 
 interface IHeaderProps {
     spikeHeaderBG: string;
-    spikeURL: string;
+    spikeUrl: string;
     spikeTitle: string;
     spikeShortName: string;
     spikeName: string;
@@ -26,7 +26,7 @@ export class Header extends React.Component<IHeaderProps> {
     ];
 
     render() {
-        const { spikeHeaderBG, spikeURL, spikeShortName, spikeTitle, spikeName } = this.props;
+        const { spikeHeaderBG, spikeUrl, spikeShortName, spikeTitle, spikeName } = this.props;
         return (
             <header className="main-header">
 
@@ -35,7 +35,7 @@ export class Header extends React.Component<IHeaderProps> {
                         JSON.stringify({
                             "@context": "http://schema.org",
                             "@type": "Organization",
-                            "url": spikeURL,
+                            "url": spikeUrl,
                             "logo": "https://readspike.com/assets/img/readspike_logo_1200x630.png",
                             "sameAs": "https://twitter.com/readspike"
                         })

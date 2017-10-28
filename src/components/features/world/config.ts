@@ -7,7 +7,7 @@ export const spikeConfig: ISpikeProps = {
     spikeDescription: 'Aggregating world news every minute',
     spikeHeaderBG: '#0074D9',
     spikeBodyBG: '#1e1d1f',
-    spikeURL: 'https://readspike.com/world/',
+    spikeUrl: 'https://readspike.com/world/',
     // const spikePath        = __DIR__ ;
     sectionConfig: [
         {
