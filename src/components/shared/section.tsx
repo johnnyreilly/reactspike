@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { canUseDOM } from '../../canUseDOM';
 
 interface ISectionProps {
     sectionUrl: string;
@@ -24,7 +25,7 @@ export class Section extends React.Component<ISectionProps, IState> {
     constructor(props: ISectionProps) {
         super(props);
         this.state = {
-            html: window.localStorage.getItem(props.sectionHtmlUrl),
+            html: canUseDOM ? window.localStorage.getItem(props.sectionHtmlUrl) : undefined,
             error: undefined as string,
             loading: false
         };
@@ -34,20 +35,24 @@ export class Section extends React.Component<ISectionProps, IState> {
         this.loadData();
 
         // refresh once a minute
-        if (this.props.autoRefresh) {
+        if (this.props.autoRefresh && canUseDOM) {
             const intervalHandle = window.setInterval(() => this.loadData(), 60000);
             this.setState(_prevState => ({ intervalHandle }));
         }
     }
 
     componentWillReceiveProps(nextProps: ISectionProps) {
-        if (nextProps.autoRefresh && !this.props.autoRefresh) {
+        if (nextProps.autoRefresh && !this.props.autoRefresh && window) {
             window.clearInterval(this.state.intervalHandle);
             this.setState(_prevState => ({ intervalHandle: undefined }));
         }
     }
 
     loadData() {
+        if (!canUseDOM) {
+            return;
+        }
+        
         const { sectionHtmlUrl } = this.props;
         this.setState(_prevState => ({ loading: true }));
         fetch(sectionHtmlUrl)
