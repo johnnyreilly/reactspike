@@ -9,7 +9,7 @@
     "downlevelIteration": true,
     "importHelpers": true,
     "sourceMap": true,
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "jsx": "react",
     "allowJs": false,
