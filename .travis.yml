@@ -23,6 +23,7 @@ install:
 
 deploy:
   provider: azure_web_apps
+  skip_cleanup: true
   verbose: true
   # on: master
   # username: azure_deployment_user       # If AZURE_WA_USERNAME isn't set
