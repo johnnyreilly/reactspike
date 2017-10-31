@@ -1,12 +1,17 @@
 {
   "name": "reactspike",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/server.js",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --progress --color --config internal/webpack/webpack.development.config.js",
+    "start": "node dist/server.js",
+
+    "prewatch": "rimraf ./dist/*",
+    "watch": "webpack --watch --progress --color --config webpack.config.development.js",
+
     "prebuild": "rimraf ./dist/*",
-    "build": "webpack --color --config internal/webpack/webpack.production.config.js",
+    "build": "webpack --color --config webpack.config.production.js",
+    
     "test:watch": "jest --watchAll",
     "test": "jest --ci --runInBand"
   },
@@ -35,13 +40,13 @@
   },
   "devDependencies": {
     "@types/classnames": "^2.2.3",
+    "@types/express": "^4.0.39",
     "@types/jest": "^21.0.0",
-    "@types/node": "^8.0.28",
+    "@types/node": "^8.0.47",
     "@types/react": "^16.0.0",
     "@types/react-dom": "^16.0.0",
-    "@types/react-hot-loader": "^3.0.4",
     "@types/react-router": "^4.0.12",
-    "@types/react-router-dom": "^4.0.5",
+    "@types/react-router-dom": "^4.2.0",
     "@types/react-test-renderer": "^16.0.0",
     "@types/react-transition-group": "^2.0.2",
     "cache-loader": "^1.0.3",
@@ -57,7 +62,6 @@
     "jest-junit": "^3.1.0",
     "node-sass": "^4.5.3",
     "react-addons-shallow-compare": "^15.6.0",
-    "react-hot-loader": "^3.0.0",
     "react-test-renderer": "^16.0.0",
     "resolve-url-loader": "^2.0.2",
     "rimraf": "^2.6.1",
@@ -75,10 +79,12 @@
     "uglifyjs-webpack-plugin": "^0.4.3",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.7.1",
+    "webpack-node-externals": "^1.6.0",
     "workbox-webpack-plugin": "^2.1.0"
   },
   "dependencies": {
     "core-js": "^2.4.1",
+    "express": "^4.16.2",
     "history": "^4.6.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",

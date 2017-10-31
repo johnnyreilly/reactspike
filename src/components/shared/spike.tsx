@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Section } from './section';
 import { Header } from '../layout/header';
 import { Footer } from '../layout/footer';
+import { canUseDOM } from '../../canUseDOM';
 
 export interface ISectionConfig {
   name: string;
@@ -38,8 +39,10 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
   constructor(props: ISpikeProps) {
     super(props);
     this.state = {
-      autoRefresh: window.localStorage.getItem(AUTOREFRESH) === 'true',
-      moreOrLessChecked: JSON.parse(window.localStorage.getItem(`${this.props.spikeUrl}_moreOrLessChecked`) || '{}')
+      autoRefresh: canUseDOM ? window.localStorage.getItem(AUTOREFRESH) === 'true' : false,
+      moreOrLessChecked: canUseDOM 
+        ? JSON.parse(window.localStorage.getItem(`${this.props.spikeUrl}_moreOrLessChecked`) || '{}')
+        : {}
     };
 }
 
