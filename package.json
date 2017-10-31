@@ -2,6 +2,9 @@
   "name": "reactspike",
   "version": "1.0.0",
   "main": "dist/server.js",
+  "engines": {
+    "node": "8"
+  },
   "license": "MIT",
   "scripts": {
     "start": "node dist/server.js",
