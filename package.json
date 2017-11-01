@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "main": "dist/server.js",
   "engines": {
-    "node": ">= 8.x"
+    "node": ">= 8.1.4",
+    "npm": "5.0.3"
   },
   "license": "MIT",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node -v && node dist/server.js",
 
     "prewatch": "rimraf ./dist/*",
     "watch": "webpack --watch --progress --color --config webpack.config.development.js",
