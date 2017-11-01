@@ -8,7 +8,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "node -v && node dist/server.js",
+    "prestart": "node -v",
+    "start": "node dist/server.js",
 
     "prewatch": "rimraf ./dist/*",
     "watch": "webpack --watch --progress --color --config webpack.config.development.js",

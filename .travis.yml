@@ -21,6 +21,10 @@ install:
 #   on:
 #     branch: master
 
+before_deploy:
+  - rm -rf node_modules src internal
+  - yarn install --production
+
 deploy:
   provider: azure_web_apps
   skip_cleanup: true
