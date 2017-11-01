@@ -23,7 +23,7 @@ install:
 
 before_deploy:
   - rm -rf node_modules src internal
-  - yarn install --production
+  # - yarn install --production
 
 deploy:
   provider: azure_web_apps
