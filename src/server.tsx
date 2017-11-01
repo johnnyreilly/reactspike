@@ -1,5 +1,6 @@
 // tslint:disable:no-console
 import { readFile } from 'fs';
+import * as path from 'path';
 import { promisify } from 'util';
 import * as React from 'react';
 import * as express from 'express';
@@ -22,7 +23,7 @@ server.get('/', async (req, res) => {
         console.info(`${httpVersion} ${method} ${url}`);
     }
 
-    const indexHtml = await readFileAsync('./dist/template.html', 'utf8');
+    const indexHtml = await readFileAsync(path.join('dist', 'template.html'), 'utf8');
     const [indexHtmlStart, indexHtmlEnd] = indexHtml.split('Welcome to ReadSpike. Loading...');
     res.write(indexHtmlStart);
 
