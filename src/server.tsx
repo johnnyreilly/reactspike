@@ -11,7 +11,7 @@ import { App } from './app';
 const readFileAsync = promisify(readFile);
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 3000;
-console.info(`Server starting in ${isDev ? 'dev mode' : 'prod mode'} on port ${PORT} ...`);
+console.info(`Server starting in ${isDev ? 'dev mode' : 'prod mode'} on port ${PORT} in ${process.cwd()} ...`);
 
 const server = express();
 
