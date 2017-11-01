@@ -52,6 +52,7 @@ const browserConfig = {
         new WorkboxPlugin({
             globDirectory: DIST_DIR,
             globPatterns: ['**/*.{html,js,css}'],
+            globIgnores: ['server.js'],
             swDest: path.resolve(DIST_DIR, 'sw.js'),
         }),
 
