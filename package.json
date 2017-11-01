@@ -1,6 +1,7 @@
 {
   "name": "reactspike",
   "version": "1.0.0",
+  "author": { "name" : "John Reilly", "email" : "johnny_reilly@hotmail.com" },
   "main": "dist/server.js",
   "engines": {
     "node": ">= 8.1.4",
