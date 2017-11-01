@@ -82,6 +82,10 @@ const serverConfig = {
     ],
 
     target: 'node',
+    node: {
+        __dirname: false,
+        __filename: false,
+    },
     externals: [nodeExternals()],
 };
 

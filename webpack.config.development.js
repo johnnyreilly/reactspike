@@ -40,7 +40,7 @@ const browserConfig = {
     output,
 
     resolve: { extensions },
-    
+
     devtool: 'inline-source-map',
     stats: 'minimal',
 
@@ -75,12 +75,12 @@ const serverConfig = {
     entry: serverEntry,
 
     output,
-    
+
     resolve: { extensions },
 
     devtool: 'inline-source-map',
     stats: 'normal',
-    
+
     module: { rules },
 
     plugins: [
@@ -88,6 +88,10 @@ const serverConfig = {
     ],
 
     target: 'node',
+    node: {
+        __dirname: false,
+        __filename: false,
+    },
     externals: [nodeExternals()],
 };
 

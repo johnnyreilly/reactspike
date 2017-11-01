@@ -11,11 +11,11 @@ import { App } from './app';
 const readFileAsync = promisify(readFile);
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 3000;
-console.info(`Server starting in ${isDev ? 'dev mode' : 'prod mode'} on port ${PORT} in ${process.cwd()} ...`);
+console.info(`Server starting in ${isDev ? 'dev mode' : 'prod mode'} on port ${PORT} in ${process.cwd()} __dirname: ${__dirname} ...`);
 
 const server = express();
 
-server.use(express.static('dist'));
+server.use(express.static(__dirname));
 
 server.get('/', async (req, res) => {
     if (isDev) {
@@ -23,7 +23,7 @@ server.get('/', async (req, res) => {
         console.info(`${httpVersion} ${method} ${url}`);
     }
 
-    const indexHtml = await readFileAsync(path.join('dist', 'template.html'), 'utf8');
+    const indexHtml = await readFileAsync(path.join(__dirname, 'template.html'), 'utf8');
     const [indexHtmlStart, indexHtmlEnd] = indexHtml.split('Welcome to ReadSpike. Loading...');
     res.write(indexHtmlStart);
 
