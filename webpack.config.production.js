@@ -53,6 +53,7 @@ const browserConfig = {
             globDirectory: DIST_DIR,
             globPatterns: ['**/*.{html,js,css}'],
             globIgnores: ['server.js'],
+            navigateFallback: 'template.html',
             swDest: path.resolve(DIST_DIR, 'sw.js'),
         }),
 
