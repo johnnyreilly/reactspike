@@ -20,17 +20,26 @@ readFile(templatePath, 'utf8', (err, indexHtml) => {
 
     const [indexHtmlStart, indexHtmlEnd] = indexHtml.split('Welcome to ReadSpike. Loading...');
     const server = express();
-    
+
     server.use(express.static(__dirname));
-    
-    server.get('/', async (req, res) => {
+
+    function spaFallback(callback: express.RequestHandler) {
+        const requestHandler: express.RequestHandler = (req, res, next) => {
+            if (req.method === 'GET' && req.accepts('html')) {
+                callback(req, res, next);
+            } else next();
+        };
+        return requestHandler;
+    }
+
+    server.use(spaFallback((req, res, _next) => {
         if (isDev) {
             const { httpVersion, method, url } = req;
             console.info(`${httpVersion} ${method} ${url}`);
         }
-    
+
         res.write(indexHtmlStart);
-    
+
         const context = {};
         const stream = renderToNodeStream(
             <StaticRouter location={req.url} context={context}>
@@ -38,15 +47,15 @@ readFile(templatePath, 'utf8', (err, indexHtml) => {
             </StaticRouter>
         );
         stream.pipe(res, { end: false });
-    
+
         stream.on('end', () => {
             res.write(indexHtmlEnd);
             res.end();
         });
-    });
-    
+    }));
+
     server.listen(PORT, isDev
         ? () => console.info(`Serving up at http://localhost:${PORT} ...`)
         : undefined
-    );        
+    );
 });
