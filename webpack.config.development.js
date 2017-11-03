@@ -50,6 +50,7 @@ const browserConfig = {
         definedVariables,
 
         // These plugins will create the HTML / CSS / FavIcon etc static assets 
+        new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js' }),
         new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
         new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
         new HtmlWebpackPlugin({

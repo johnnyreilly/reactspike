@@ -28,9 +28,11 @@ const browserConfig = {
         definedVariables,
 
         // These plugins will create the HTML / CSS / FavIcon / ServiceWorker etc static assets 
+        new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js' }),
         new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
         new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
         new HtmlWebpackPlugin({
+            hash: true,
             filename: 'template.html',
             inject: true,
             template: 'src/template.html',
@@ -50,7 +52,7 @@ const browserConfig = {
         new UglifyJSPlugin(),
         new WorkboxPlugin({
             globDirectory: DIST_DIR,
-            globPatterns: ['**/*.{js,css,png,svg,jpg,gif}'],
+            globPatterns: ['**/*.{js,css,png,svg,jpg,gif,json}'],
             globIgnores: ['server.js'],
             clientsClaim: true,
             skipWaiting: true,

@@ -34,17 +34,26 @@ const rules = [
     }
 ];
 
-exports.browserEntry = {
-    browser: [
-        'core-js',
-        'whatwg-fetch',
-        './src/browser.tsx'
-    ],
-};
+function makeVendorEntry(config) {
+    const packageJson = require('./package.json');
+    const vendorDependencies = Object.keys(packageJson['dependencies']);
 
-exports.serverEntry = {
-    server: "./src/server.tsx"
-};
+    // config example value: 
+    // {
+    //     mainModules: [ './src/index.tsx' ],
+    //     modulesToExclude: ['express']
+    // }
+    const vendorModulesMinusExclusions = vendorDependencies.filter(vendorModule =>
+        config.mainModules.indexOf(vendorModule) === -1 && config.modulesToExclude.indexOf(vendorModule) === -1);
+
+    return vendorModulesMinusExclusions;
+}
+
+const browser = [ './src/browser.tsx' ];
+const vendor = makeVendorEntry({ mainModules: browser, modulesToExclude: ['express'] })
+
+exports.browserEntry = { vendor, browser };
+exports.serverEntry = { server: './src/server.tsx' };
 
 exports.extensions = ['.ts', '.tsx', '.js', '.jsx'];
 
