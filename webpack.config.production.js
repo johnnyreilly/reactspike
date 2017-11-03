@@ -17,7 +17,7 @@ const definedVariables = new webpack.DefinePlugin({
 
 const browserConfig = {
     entry: browserEntry,
-    
+
     output,
 
     resolve: { extensions },
@@ -25,6 +25,8 @@ const browserConfig = {
     module: { rules },
 
     plugins: [
+        definedVariables,
+
         // These plugins will create the HTML / CSS / FavIcon / ServiceWorker etc static assets 
         new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
         new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
@@ -53,7 +55,19 @@ const browserConfig = {
             globDirectory: DIST_DIR,
             globPatterns: ['**/*.{html,js,css}'],
             globIgnores: ['server.js'],
-            navigateFallback: 'template.html',
+            // navigateFallback: 'template.html',
+            runtimeCaching: [{
+                // match empty strings and words
+                urlPattern: /^(^.{0}|\w+)$/,
+                handler: 'networkFirst',
+                options: {
+                    networkTimeoutSeconds: 2,
+                },
+            }, {
+                // match files with a suffix eg html / css / js etc
+                urlPattern: /\.[\w\d]+$/,
+                handler: 'cacheFirst',
+            }],
             swDest: path.resolve(DIST_DIR, 'sw.js'),
         }),
 
@@ -65,8 +79,6 @@ const browserConfig = {
             checkSyntacticErrors: true
         }),
         new webpack.NoEmitOnErrorsPlugin(),
-
-        definedVariables,
     ],
 };
 
@@ -74,9 +86,9 @@ const serverConfig = {
     entry: serverEntry,
 
     output,
-    
+
     resolve: { extensions },
-    
+
     module: { rules },
 
     plugins: [

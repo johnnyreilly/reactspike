@@ -47,6 +47,8 @@ const browserConfig = {
     module: { rules },
 
     plugins: [
+        definedVariables,
+
         // These plugins will create the HTML / CSS / FavIcon etc static assets 
         new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
         new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
@@ -66,8 +68,6 @@ const browserConfig = {
             watch: ['./src'] // optional but improves performance (fewer stat calls)
         }),
         new webpack.NoEmitOnErrorsPlugin(),
-
-        definedVariables
     ],
 };
 
