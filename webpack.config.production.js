@@ -55,6 +55,8 @@ const browserConfig = {
             globDirectory: DIST_DIR,
             globPatterns: ['**/*.{html,js,css}'],
             globIgnores: ['server.js'],
+            clientsClaim: true,
+            skipWaiting: true,
             // navigateFallback: 'template.html',
             runtimeCaching: [{
                 // match empty strings and words
