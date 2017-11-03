@@ -28,15 +28,6 @@ const rules = [
             ]
         })
     },
-    // {
-    //     test: /\.svg/,
-    //     use: {
-    //         loader: 'svg-url-loader',
-    //         options: {
-    //             noquotes: false
-    //         }
-    //     }
-    // },
     {
         test: /\.jpe?g$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.woff2$|\.eot$|\.ttf$|\.wav$|\.mp3$/,
         loader: 'file-loader?name=[name].[hash].[ext]'

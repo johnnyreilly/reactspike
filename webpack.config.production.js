@@ -47,13 +47,10 @@ const browserConfig = {
                 minifyURLs: true,
             },
         }),
-        new UglifyJSPlugin({
-            unused: true,
-            dead_code: true
-        }),
+        new UglifyJSPlugin(),
         new WorkboxPlugin({
             globDirectory: DIST_DIR,
-            globPatterns: ['**/*.{html,js,css}'],
+            globPatterns: ['**/*.{js,css,png,svg,jpg,gif}'],
             globIgnores: ['server.js'],
             clientsClaim: true,
             skipWaiting: true,
@@ -66,7 +63,7 @@ const browserConfig = {
                     networkTimeoutSeconds: 2,
                 },
             }, {
-                // match files with a suffix eg html / css / js etc
+                // match files with a suffix eg css / js etc
                 urlPattern: /\.[\w\d]+$/,
                 handler: 'cacheFirst',
             }],
