@@ -12,7 +12,6 @@ const { rules, extensions, browserEntry, serverEntry, output, DIST_DIR } = requi
 
 const definedVariables = new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify('production'),
-    'process.env.PUBLIC_URL': JSON.stringify(''),
 });
 
 const browserConfig = {
@@ -32,7 +31,7 @@ const browserConfig = {
         new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
         new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
         new HtmlWebpackPlugin({
-            hash: true,
+            // hash: true,
             filename: 'template.html',
             inject: true,
             template: 'src/template.html',
@@ -52,22 +51,16 @@ const browserConfig = {
         new UglifyJSPlugin(),
         new WorkboxPlugin({
             globDirectory: DIST_DIR,
-            globPatterns: ['**/*.{js,css,png,svg,jpg,gif,json}'],
+            globPatterns: ['**/*.{js,css}', '**/*.{png,svg,jpg,gif,json}'],
             globIgnores: ['server.js'],
             clientsClaim: true,
             skipWaiting: true,
             // navigateFallback: 'template.html',
             runtimeCaching: [{
                 // match empty strings and words
-                urlPattern: /^(^.{0}|\w+)$/,
+                urlPattern: /^(.{0}|\w+)$/,
                 handler: 'networkFirst',
-                options: {
-                    networkTimeoutSeconds: 2,
-                },
-            }, {
-                // match files with a suffix eg css / js etc
-                urlPattern: /\.[\w\d]+$/,
-                handler: 'cacheFirst',
+                options: { cacheName: 'html-cache' }
             }],
             swDest: path.resolve(DIST_DIR, 'sw.js'),
         }),
