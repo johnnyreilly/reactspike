@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { homePath } from '../features/home';
 import { worldPath } from '../features/world';
+import { brightonPath } from '../features/brighton';
 
 interface IHeaderProps {
     spikeHeaderBG: string;
@@ -19,7 +20,7 @@ export class Header extends React.Component<IHeaderProps> {
         { path: homePath, className: 's-home', title: 'Home' },
         { path: worldPath, className: 's-world', title: 'World' },
         { path: homePath, className: 's-london', title: 'London' },
-        { path: homePath, className: 's-brighton', title: 'Brighton' },
+        { path: brightonPath, className: 's-brighton', title: 'Brighton' },
         { path: homePath, className: 's-funny', title: 'Funny' },
         { path: homePath, className: 's-webdev', title: 'WebDev' },
         { path: homePath, className: 's-home', title: 'Feedback' },
