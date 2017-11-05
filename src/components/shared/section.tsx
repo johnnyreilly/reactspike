@@ -25,7 +25,7 @@ export class Section extends React.Component<ISectionProps, IState> {
     constructor(props: ISectionProps) {
         super(props);
         this.state = {
-            html: canUseDOM ? window.localStorage.getItem(props.sectionHtmlUrl) : undefined,
+            html: canUseDOM ? /*window.localStorage.getItem(props.sectionHtmlUrl)*/undefined : undefined,
             error: undefined as string,
             loading: false
         };
@@ -61,7 +61,7 @@ export class Section extends React.Component<ISectionProps, IState> {
                     value.text()
                         .then(html => {
                             this.setState(_prevState => ({ html, loading: false }));
-                            window.localStorage.setItem(sectionHtmlUrl, html);
+                            // window.localStorage.setItem(sectionHtmlUrl, html);
                         })
                         .catch(error => {
                             this.setState(_prevState => ({ error: error.message ? error.message : error, loading: false }));

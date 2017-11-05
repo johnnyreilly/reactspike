@@ -29,8 +29,11 @@ function formatterForLineAndColumnUrlClicking(message, useColors) {
 }
 // END
 
+const PUBLIC_URL = 'http://localhost:3000';
+// const PUBLIC_URL = 'https://reactspike.azurewebsites.net';
 const definedVariables = new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify('development'),
+    'process.env.PUBLIC_URL': JSON.stringify(PUBLIC_URL),
 });
 
 const browserConfig = {
