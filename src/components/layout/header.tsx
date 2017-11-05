@@ -6,6 +6,8 @@ import { homePath } from '../features/home';
 import { worldPath } from '../features/world';
 import { londonPath } from '../features/london';
 import { brightonPath } from '../features/brighton';
+import { funnyPath } from '../features/funny';
+import { webdevPath } from '../features/webdev';
 
 interface IHeaderProps {
     spikeHeaderBG: string;
@@ -22,8 +24,8 @@ export class Header extends React.Component<IHeaderProps> {
         { path: worldPath, className: 's-world', title: 'World' },
         { path: londonPath, className: 's-london', title: 'London' },
         { path: brightonPath, className: 's-brighton', title: 'Brighton' },
-        { path: homePath, className: 's-funny', title: 'Funny' },
-        { path: homePath, className: 's-webdev', title: 'WebDev' },
+        { path: funnyPath, className: 's-funny', title: 'Funny' },
+        { path: webdevPath, className: 's-webdev', title: 'WebDev' },
         { path: homePath, className: 's-home', title: 'Feedback' },
     ];
 
