@@ -1,0 +1,132 @@
+{
+    "spikeName": "Readspike London",
+    "spikeShortName": "london",
+    "spikeTitle": "Simple news aggregator",
+    "spikeDescription": "Aggregating all the London news every minute",
+    "spikeHeaderBG": "#39CCCC",
+    "spikeBodyBG": "#1e1d1f",
+    "spikeUrl": "https://readspike.com/london/",
+    "sectionConfig": [
+        {
+            "name": "Reddit",
+            "title": "Reddit London",
+            "type": "json",
+            "color": "#ff4e00",
+            "col": "3",
+            "row": "0",
+            "mob": "0",
+            "url": "https://www.reddit.com/r/london/",
+            "feed": "https://www.reddit.com/r/london/.json?limit=100"
+        },
+        {
+            "name": "EveningStandard",
+            "title": "Evening Standard",
+            "type": "xml",
+            "color": "#ff970d",
+            "col": "2",
+            "row": "0",
+            "mob": "1",
+            "url": "http://www.standard.co.uk/",
+            "feed": "http://www.standard.co.uk/rss"
+        },
+        {
+            "name": "BBCLondon",
+            "title": "BBC London News",
+            "type": "xml",
+            "color": "#a91717",
+            "col": "1",
+            "row": "0",
+            "mob": "2",
+            "url": "http://www.bbc.com/news/england/london",
+            "feed": "http://feeds.bbci.co.uk/news/england/london/rss.xml"
+        },
+        {
+            "name": "TimeOut",
+            "title": "Time Out London",
+            "type": "xml",
+            "color": "#E1192C",
+            "col": "2",
+            "row": "1",
+            "mob": "3",
+            "url": "http://www.timeout.com/london/",
+            "feed": "http://www.timeout.com/london/blog/feed.rss"
+        },
+        {
+            "name": "Pinboard",
+            "title": "Pinboard London",
+            "type": "json",
+            "color": "#5a80f2",
+            "col": "1",
+            "row": "5",
+            "mob": "12",
+            "url": "https://www.pinboard.in/t:london/",
+            "feed": "https://feeds.pinboard.in/json/t:london/"
+        },
+        {
+            "name": "theguardian",
+            "title": "The Guardian London",
+            "type": "xml",
+            "color": "#005689",
+            "col": "1",
+            "row": "1",
+            "mob": "3",
+            "url": "https://www.theguardian.com/uk/london",
+            "feed": "https://www.theguardian.com/uk/london/rss"
+        },
+        {
+            "name": "Weather",
+            "title": "London Weather",
+            "type": "xml",
+            "color": "#77cdff",
+            "col": "1",
+            "row": "1",
+            "mob": "4",
+            "url": "http://www.bbc.co.uk/weather/2643743",
+            "feed": "http://open.live.bbc.co.uk/weather/feeds/en/2643743/3dayforecast.rss"
+        },
+        {
+            "name": "ITVNews",
+            "title": "ITV London News",
+            "type": "xml",
+            "color": "#19bec8",
+            "col": "3",
+            "row": "5",
+            "mob": "12",
+            "url": "http://www.itv.com/news/london/",
+            "feed": "http://www.itv.com/news/london/index.rss"
+        },
+        {
+            "name": "LocalLondon",
+            "title": "Local London",
+            "type": "xml",
+            "color": "#ef6925",
+            "col": "2",
+            "row": "6",
+            "mob": "13",
+            "url": "http://www.thisislocallondon.co.uk/news/",
+            "feed": "http://www.thisislocallondon.co.uk/news/rss/"
+        },
+        {
+            "name": "visitlondon",
+            "title": "Visit London",
+            "type": "xml",
+            "color": "#b20e13",
+            "col": "3",
+            "row": "7",
+            "mob": "14",
+            "url": "http://www.visitlondon.co.uk/news/",
+            "feed": "http://feeds.visitlondon.com/WhatsOnInLondon"
+        },
+        {
+            "name": "metPolice",
+            "title": "Metropolitan Police",
+            "type": "xml",
+            "color": "#043a9c",
+            "col": "3",
+            "row": "8",
+            "mob": "15",
+            "url": "http://news.met.police.uk/latest_news",
+            "feed": "http://news.met.police.uk/rss/current_news/66871"
+        }
+    ]
+}

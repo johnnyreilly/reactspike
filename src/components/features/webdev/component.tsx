@@ -1,17 +1,9 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { SpikePage } from '../../shared/spike';
-import { spikeConfig } from './config';
+import { SpikePage, ISpikeProps } from '../../shared/spike';
+
+const spikeConfig: ISpikeProps = require('../../../spike-configs/webdev.json');
 
 export const WebDevPage: React.SFC<RouteComponentProps<{}>> = _props => (
-  <SpikePage
-    spikeName={spikeConfig.spikeName}
-    spikeShortName={spikeConfig.spikeShortName}
-    spikeUrl={spikeConfig.spikeUrl}
-    spikeTitle={spikeConfig.spikeTitle}
-    spikeBodyBG={spikeConfig.spikeBodyBG}
-    spikeHeaderBG={spikeConfig.spikeHeaderBG}
-    spikeDescription={spikeConfig.spikeDescription}
-    sectionConfig={spikeConfig.sectionConfig}
-  />
+  <SpikePage {...spikeConfig} />
 );
