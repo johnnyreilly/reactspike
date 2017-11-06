@@ -54,7 +54,7 @@ const browserConfig = {
         new UglifyJSPlugin(),
         new WorkboxPlugin({
             globDirectory: DIST_DIR,
-            globPatterns: ['**/*.{js,css}', '**/*.{png,svg,jpg,gif,json}'],
+            globPatterns: ['**/*.{js,css,png,svg,jpg,gif,json}'],
             globIgnores: ['server.js'],
             swDest: path.resolve(DIST_DIR, 'sw.js'),
             clientsClaim: true,

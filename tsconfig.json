@@ -30,6 +30,7 @@
     "noUnusedLocals": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
+    "strictFunctionTypes": true,
     "suppressImplicitAnyIndexErrors": true
   }
 }
