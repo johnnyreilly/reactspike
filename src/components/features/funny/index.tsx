@@ -7,3 +7,5 @@ const spikeConfig: ISpikeProps = require('../../../spike-configs/funny.json');
 export const FunnyPage: React.SFC<RouteComponentProps<{}>> = _props => (
   <SpikePage {...spikeConfig} />
 );
+
+export const funnyPath = '/funny';

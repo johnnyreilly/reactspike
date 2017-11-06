@@ -7,3 +7,5 @@ const spikeConfig: ISpikeProps = require('../../../spike-configs/brighton.json')
 export const BrightonPage: React.SFC<RouteComponentProps<{}>> = _props => (
   <SpikePage {...spikeConfig} />
 );
+
+export const brightonPath = '/brighton';
