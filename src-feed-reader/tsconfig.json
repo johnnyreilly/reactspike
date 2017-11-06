@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "../dist-feed-reader",
+    "outDir": "../App_Data/jobs/triggered/create-json/dist-feed-reader",
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
