@@ -34,7 +34,7 @@ const browserConfig = {
         new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
         new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
         new HtmlWebpackPlugin({
-            hash: true,
+            // hash: true,
             filename: 'template.html',
             inject: true,
             template: 'src/template.html',
