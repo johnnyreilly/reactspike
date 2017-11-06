@@ -21,6 +21,9 @@ install:
 #   on:
 #     branch: master
 
+git:
+  depth: 9999999
+
 before_deploy:
   - rm -rf node_modules src internal
   # - yarn install --production
