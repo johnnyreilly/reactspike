@@ -12,21 +12,13 @@ sudo: false
 install:
   - yarn install
   - yarn build
-
-# deploy:
-#   local_dir: dist
-#   provider: pages
-#   skip_cleanup: true
-#   github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
-#   on:
-#     branch: master
+  - yarn build:readfeeds
 
 git:
   depth: 9999999
 
 before_deploy:
-  - rm -rf node_modules src internal
-  # - yarn install --production
+  - rm -rf node_modules src src-feed-reader internal
 
 deploy:
   provider: azure_web_apps

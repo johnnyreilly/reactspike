@@ -15,6 +15,10 @@
     "prestart": "node -v",
     "start": "node dist/server.js",
 
+    "prebuild:readfeeds": "rimraf ./dist-feed-reader/*",
+    "build:readfeeds": "tsc  --project ./src-feed-reader",
+    "readfeeds": "node dist-feed-reader/feedReader.js",
+    
     "start:dev": "nodemon dist/server.js",
 
     "prewatch": "rimraf ./dist/*",

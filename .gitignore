@@ -1,5 +1,6 @@
 node_modules/
 dist/
+dist-feed-reader/
 .cache-loader
 junit.xml
 debug.log
