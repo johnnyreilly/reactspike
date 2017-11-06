@@ -14,13 +14,13 @@
   "scripts": {
     "prestart": "node -v",
     "start": "node dist/server.js",
-
+    
+    "start:dev": "nodemon dist/server.js",
+    
     "prebuild:readfeeds": "rimraf ./App_Data/**/*.*",
     "build:readfeeds": "tsc --project ./src-feed-reader",
     "postbuild:readfeeds": "cp src-feed-reader/settings.job App_Data/jobs/triggered/create-json/dist-feed-reader/settings.job",
-    "readfeeds": "node dist-feed-reader/feedReader.js",
-    
-    "start:dev": "nodemon dist/server.js",
+    "readfeeds": "node App_Data/jobs/triggered/create-json/dist-feed-reader/feedReader.js",
 
     "prewatch": "rimraf ./dist/*",
     "watch": "webpack --watch --progress --color --config webpack.config.development.js",

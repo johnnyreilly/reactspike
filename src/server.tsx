@@ -21,8 +21,10 @@ readFile(templatePath, 'utf8', (err, indexHtml) => {
     const [indexHtmlStart, indexHtmlEnd] = indexHtml.split('Welcome to ReadSpike. Loading...');
     const server = express();
 
+    const jsonPath = path.resolve(__dirname, '..', 'App_Data', 'jobs', 'triggered', 'create-json', 'dist-feed-reader');
     server.use(express.static(__dirname));
-
+    server.use(express.static(jsonPath));
+    
     function spaFallback(callback: express.RequestHandler) {
         const requestHandler: express.RequestHandler = (req, res, next) => {
             if (req.method === 'GET' && req.accepts('html')) {
