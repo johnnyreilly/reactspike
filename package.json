@@ -14,20 +14,15 @@
   "scripts": {
     "prestart": "node -v",
     "start": "node dist/server.js",
-    
     "start:dev": "nodemon dist/server.js",
-    
     "prebuild:readfeeds": "rimraf ./App_Data/**/*.*",
     "build:readfeeds": "tsc --project ./src-feed-reader",
-    "postbuild:readfeeds": "cp src-feed-reader/settings.job App_Data/jobs/triggered/create-json/dist-feed-reader/settings.job",
+    "postbuild:readfeeds": "cp src-feed-reader/settings.job App_Data/jobs/triggered/create-json/dist-feed-reader/settings.job && cp -r src/spike-configs App_Data/jobs/triggered/create-json/dist-feed-reader && mkdirp App_Data/jobs/triggered/create-json/dist-feed-reader/spike-data",
     "readfeeds": "node App_Data/jobs/triggered/create-json/dist-feed-reader/feedReader.js",
-
     "prewatch": "rimraf ./dist/*",
     "watch": "webpack --watch --progress --color --config webpack.config.development.js",
-
     "prebuild": "rimraf ./dist/*",
     "build": "webpack --color --config webpack.config.production.js",
-
     "test:watch": "jest --watchAll",
     "test": "jest --ci --runInBand"
   },
@@ -64,7 +59,6 @@
     "@types/react-router": "^4.0.12",
     "@types/react-router-dom": "^4.2.0",
     "@types/react-test-renderer": "^16.0.0",
-    "@types/react-transition-group": "^2.0.2",
     "cache-loader": "^1.0.3",
     "classnames": "^2.2.5",
     "css-loader": "^0.28.7",
@@ -76,6 +70,7 @@
     "html-webpack-plugin": "^2.28.0",
     "jest": "^21.1.0",
     "jest-junit": "^3.1.0",
+    "mkdirp": "^0.5.1",
     "node-sass": "^4.5.3",
     "nodemon": "^1.12.1",
     "react-addons-shallow-compare": "^15.6.0",
@@ -101,11 +96,11 @@
     "core-js": "^2.4.1",
     "express": "^4.16.2",
     "history": "^4.6.1",
+    "isomorphic-fetch": "^2.0.3",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
-    "tslib": "^1.7.1",
-    "whatwg-fetch": "^2.0.3"
+    "tslib": "^1.7.1"
   }
 }
