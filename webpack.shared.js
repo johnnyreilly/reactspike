@@ -50,7 +50,7 @@ function makeVendorEntry(config) {
 }
 
 const browser = [ './src/browser.tsx' ];
-const vendor = makeVendorEntry({ mainModules: browser, modulesToExclude: ['express'] })
+const vendor = makeVendorEntry({ mainModules: browser, modulesToExclude: ['express', 'xml2js'] })
 
 exports.browserEntry = { vendor, browser };
 exports.serverEntry = { server: './src/server.tsx' };

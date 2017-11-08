@@ -1,5 +1,6 @@
 // tslint:disable:no-console
 import 'isomorphic-fetch';
+import * as xml2js from 'xml2js';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as util from 'util';
@@ -39,6 +40,9 @@ const spikeDataPath = path.join(__dirname, 'spike-data');
 async function fetchFeed(url: string) {
     try {
         const response = await fetch(url);
+        if (!response.ok) {
+            return { text: undefined as string, error: `${response.status}: ${response.statusText}` };
+        }
         const text = await response.text();
         return { text, error: undefined };
     } catch (error) {
@@ -59,7 +63,30 @@ async function saveData(filename: string, data: string) {
 async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike) {
     const configAndDatas = await Promise.all(spike.sectionConfig.map(async config => {
         const result = await fetchFeed(config.feed);
-        return Object.assign({}, config, { result });
+        if (result.text && config.type === 'xml') {
+            try {
+                const jsObj = await new Promise((resolve, reject) => {
+                    xml2js.parseString(result.text, { ignoreAttrs: true }, (err, data) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(data);
+                        }
+                    });
+                });
+                return Object.assign({}, config, { result: jsObj });
+            } catch (err) {
+                console.error('Failed to convert xml to json for ' + config.feed, err);
+
+                // const invalidXmlFilepath = path.join(spikeDataPath, `${spike.spikeShortName || 'home'}-invalid-${config.title}.xml`);
+                // await writeFileAsync(invalidXmlFilepath, result.text);
+                // const reasonFilepath = path.join(spikeDataPath, `${spike.spikeShortName || 'home'}-invalid-${config.title}-reason.txt`);
+                // await writeFileAsync(reasonFilepath, 'Failed to convert xml to json for ' + config.feed + '\r\n' + JSON.stringify(err));
+            
+                return Object.assign({}, config, { result: 'Failed to convert xml to json for ' + config.feed });
+            }
+        }
+        return Object.assign({}, config, { result: result.text || result.error });
     }));
 
     await saveData(spikeConfigJsonFilename, JSON.stringify(configAndDatas));
