@@ -43,6 +43,7 @@ async function fetchFeed(url: string) {
         if (!response.ok) {
             return { text: undefined as string, error: `${response.status}: ${response.statusText}` };
         }
+
         const text = await response.text();
         return { text, error: undefined };
     } catch (error) {
@@ -66,7 +67,7 @@ async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike)
         if (result.text && config.type === 'xml') {
             try {
                 const jsObj = await new Promise((resolve, reject) => {
-                    xml2js.parseString(result.text, { ignoreAttrs: true }, (err, data) => {
+                    xml2js.parseString(result.text, (err, data) => {
                         if (err) {
                             reject(err);
                         } else {
@@ -82,11 +83,15 @@ async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike)
                 // await writeFileAsync(invalidXmlFilepath, result.text);
                 // const reasonFilepath = path.join(spikeDataPath, `${spike.spikeShortName || 'home'}-invalid-${config.title}-reason.txt`);
                 // await writeFileAsync(reasonFilepath, 'Failed to convert xml to json for ' + config.feed + '\r\n' + JSON.stringify(err));
-            
+
                 return Object.assign({}, config, { result: 'Failed to convert xml to json for ' + config.feed });
             }
         }
-        return Object.assign({}, config, { result: result.text || result.error });
+        return Object.assign({}, config, {
+            result: result.text
+                ? JSON.parse(result.text)
+                : { error: result.error }
+        });
     }));
 
     await saveData(spikeConfigJsonFilename, JSON.stringify(configAndDatas));
