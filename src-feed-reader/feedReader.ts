@@ -58,7 +58,7 @@ async function saveData(filename: string, data: string) {
 
 async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike) {
     const configAndDatas = await Promise.all(spike.sectionConfig.map(async config => {
-        const result = await fetchFeed(config.url);
+        const result = await fetchFeed(config.feed);
         return Object.assign({}, config, { result });
     }));
 

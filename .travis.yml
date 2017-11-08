@@ -13,6 +13,7 @@ install:
   - yarn install
   - yarn build
   - yarn build:readfeeds
+  - yarn readfeeds
 
 git:
   depth: 9999999
