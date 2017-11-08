@@ -1,13 +1,9 @@
 {
   "compilerOptions": {
     "outDir": "../App_Data/jobs/triggered/create-json/dist-feed-reader",
-    "target": "es5",
+    "target": "esnext",
     "module": "commonjs",
     "moduleResolution": "node",
-    "lib": [
-      "es2015",
-      "dom"
-    ],
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "noUnusedParameters": true,
