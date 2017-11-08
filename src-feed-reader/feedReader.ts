@@ -94,7 +94,10 @@ async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike)
         });
     }));
 
-    await saveData(spikeConfigJsonFilename, JSON.stringify(configAndDatas));
+    await saveData(spikeConfigJsonFilename, JSON.stringify({
+        generatedAt: new Date().toISOString(),
+        configAndDatas
+    }));
 }
 
 async function main() {
