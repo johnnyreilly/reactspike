@@ -7,8 +7,7 @@
   },
   "main": "dist/server.js",
   "engines": {
-    "node": ">= 8.1.4",
-    "npm": "4.6.1"
+    "node": ">= 8.1.4"
   },
   "license": "MIT",
   "scripts": {
