@@ -29,6 +29,11 @@ interface ISectionConfig {
     url: string;
     feed: string;
 }
+
+interface ISectionParsed<TResult = any> {
+    result?: TResult;
+    error?: any;
+}
 /*
 interface ISectionData {
     name: string;
@@ -88,7 +93,7 @@ async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike)
                         }
                     });
                 });
-                return Object.assign({}, config, { result: jsObj });
+                return Object.assign({}, config, { result: jsObj } as ISectionParsed);
             } catch (err) {
                 console.error('Failed to convert xml to json for ' + config.feed, err);
 
@@ -97,21 +102,70 @@ async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike)
                 // const reasonFilepath = path.join(spikeDataPath, `${spike.spikeShortName || 'home'}-invalid-${config.title}-reason.txt`);
                 // await writeFileAsync(reasonFilepath, 'Failed to convert xml to json for ' + config.feed + '\r\n' + JSON.stringify(err));
 
-                return Object.assign({}, config, { result: 'Failed to convert xml to json for ' + config.feed });
+                return Object.assign({}, config, { error: 'Failed to convert xml to json for ' + config.feed } as ISectionParsed);
             }
         }
-        return Object.assign({}, config, {
-            result: result.text
-                ? JSON.parse(result.text)
-                : { error: result.error }
-        });
+        return Object.assign({}, config, (
+            result.text
+                ? { result: JSON.parse(result.text) }
+                : result
+        ) as ISectionParsed
+        );
     }));
+
+    const transformedData = configAndDatas.map(configAndData => {
+        if (configAndData.error) {
+            return configAndData;
+        }
+
+        const mapper = mappers[configAndData.name] || mappers[DEFAULT_MAPPER];
+        return Object.assign({}, configAndData, { data: mapper(configAndData), result: undefined });
+    });
 
     await saveData(spikeConfigJsonFilename, JSON.stringify({
         generatedAt: new Date().toISOString(),
-        configAndDatas
+        transformedData
     }));
 }
+
+const DEFAULT_MAPPER = '__defaultMapper';
+const mappers: { [sectionName: string]: (configAndData: ISectionConfig & ISectionParsed) => any } = {
+    'Reddit': (_configAndData) => { return {}; },
+
+    'Pinboard': (_configAndData) => { return {}; },
+
+    'Slashdot': (_configAndData) => { return {}; },
+
+    'TheRegister': (_configAndData) => { return {}; },
+
+    'TheVerge': (_configAndData) => { return {}; },
+
+    'Bitcoin': (_configAndData) => { return {}; },
+
+    'HackerNews': (_configAndData) => { return {}; },
+
+    [DEFAULT_MAPPER]: (configAndData: ISectionConfig & ISectionParsed<{
+        rss: {
+            channel: {
+                item: {
+                    description: string[];
+                    title: string[];
+                    link: string[];
+                }[];
+            }[];
+        }
+    }>) => {
+        const mappedData = configAndData.result.rss.channel.map(chan => {
+            return chan.item.map(itm => ({
+                selftext: itm.description ? itm.description[0] : 'nada',
+                title: itm.title ? itm.title[0] : 'nada',
+                url: itm.link ? itm.link[0] : 'nada'
+            }));
+        });
+        const flat: { selftext: string; title: string; url: string; }[] = [].concat.apply([], mappedData);
+        return flat;
+    }
+};
 
 async function main() {
     try {
