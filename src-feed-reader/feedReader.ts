@@ -29,7 +29,20 @@ interface ISectionConfig {
     url: string;
     feed: string;
 }
-
+/*
+interface ISectionData {
+    name: string;
+    over18: boolean;
+    postHint: string;
+    url: string;
+    comments: string;
+    title: string;
+    stickied: boolean;
+    thumbnail: string;
+    subreddit: string;
+    ups: string;
+}
+*/
 const readFileAsync = util.promisify(fs.readFile);
 const readdirAsync = util.promisify(fs.readdir);
 const writeFileAsync = util.promisify(fs.writeFile);
