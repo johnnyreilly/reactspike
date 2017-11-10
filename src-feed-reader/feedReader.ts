@@ -4,144 +4,19 @@ import * as xml2js from 'xml2js';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as util from 'util';
-
-// TODO: Share this between job and app
-interface ISpike {
-    spikeName: string;
-    spikeShortName: string;
-    spikeUrl: string;
-    spikeTitle: string;
-    spikeDescription: string;
-    spikeHeaderBG: string;
-    spikeBodyBG: string;
-
-    sectionConfig: ISectionConfig[];
-}
-
-interface ISectionConfig {
-    name: string;
-    title: string;
-    type: string;
-    col: string;
-    row: string;
-    mob: string;
-    color: string;
-    url: string;
-    feed: string;
-}
-
-interface ISectionParsed<TResult = any> {
-    result?: TResult;
-    error?: any;
-}
-
-interface IReddit {
-    data: {
-        children: {
-            data: {
-                num_comments: number;
-                over_18: boolean;
-                permalink: string;
-                post_hint: 'rich:video' | 'image' | 'text';
-                preview: {
-                    images: {
-                        resolutions: {
-                            url: string;
-                        }[];
-                    }[];
-                };
-                selftext: string;
-                subreddit: string;
-                stickied: boolean;
-                title: string;
-                url: string;
-                ups: number;
-            }
-        }[];
-    };
-}
-
-interface ISlashdot {
-    'rdf:RDF': {
-        item: IItem[];
-    };
-}
-
-interface IRss {
-    rss: {
-        channel: {
-            item: IItem[];
-        }[];
-    };
-}
-
-interface IItem {
-    description: string[];
-    title: string[];
-    link: string[];
-    comments?: string[];
-}
-
-interface IAtomRss {
-    feed: {
-        entry: {
-            content: {
-                _: string;
-            }[];
-            summary: {
-                _: string;
-            }[];
-            title: string[];
-            link: {
-                $: {
-                    href: string;
-                }
-            }[];
-        }[];
-    };
-}
-
-interface ISectionData {
-    title: string;
-    selftext: string;
-    url: string;
-    comments?: string;
-    numComments?: number;
-    name?: string;
-    over18?: boolean;
-    postHint?: string;
-    stickied?: boolean;
-    thumbnail?: string;
-    subreddit?: string;
-    ups?: number;
-}
-
-interface ISectionDataBitcoin {
-    symbol: string;
-    amount: string;
-    code: string;
-    country: string;
-}
-
-interface IPinboard {
-    u: string;
-    d: string;
-    n: string;
-    dt: string;
-    a: string;
-    t: string[];
-}
-
-interface IBitcoin {
-    bpi: {
-        [currencyCode: string]: {
-            code: string;
-            symbol: string;
-            rate: string;
-            description: string;
-        }
-    };
-}
+import {
+    ISpike,
+    ISectionConfig,
+    ISectionParsed,
+    IReddit,
+    ISlashdot,
+    IRss,
+    IAtomRss,
+    IBitcoin,
+    IPinboard,
+    ISectionData,
+    ISectionDataBitcoin
+} from './interfaces';
 
 const readFileAsync = util.promisify(fs.readFile);
 const readdirAsync = util.promisify(fs.readdir);
@@ -214,7 +89,7 @@ async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike)
         }
 
         const mapper = mappers[configAndData.name] || mappers[DEFAULT_MAPPER];
-        return Object.assign({}, configAndData, { data: mapper(configAndData)/*, result: undefined*/ });
+        return Object.assign({}, configAndData, { data: mapper(configAndData), result: undefined });
     });
 
     await saveData(spikeConfigJsonFilename, JSON.stringify({
