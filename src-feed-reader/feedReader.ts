@@ -133,7 +133,7 @@ async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike)
         }
 
         const mapper = mappers[configAndData.name] || mappers[DEFAULT_MAPPER];
-        return Object.assign({}, configAndData, { data: mapper(configAndData), result: undefined });
+        return Object.assign({}, configAndData, { data: mapper(configAndData)/*, result: undefined*/ });
     });
 
     await saveData(spikeConfigJsonFilename, JSON.stringify({
