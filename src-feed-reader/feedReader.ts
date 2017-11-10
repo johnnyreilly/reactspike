@@ -48,6 +48,22 @@ interface IRss {
     };
 }
 
+interface IVergeRss {
+    feed: {
+        entry: {
+            content: {
+                _: string;
+            }[];
+            title: string[];
+            link: {
+                $: {
+                    href: string;
+                }
+            }[];
+        }[];
+    };
+}
+
 interface ISectionData {
     title: string;
     selftext: string;
@@ -152,31 +168,38 @@ const mappers: { [sectionName: string]: (configAndData: ISectionConfig & ISectio
 
     'TheRegister': (_configAndData) => { return {}; },
 
-    'TheVerge': (_configAndData) => { return {}; },
+    'TheVerge': (configAndData: ISectionConfig & ISectionParsed<IVergeRss>) => {
+        const mappedData = configAndData.result.feed.entry.map<ISectionData>(entry => ({
+            selftext: entry.content && entry.content.length > 0 ? entry.content[0]._ : undefined,
+            title: entry.title && entry.title.length > 0 ? entry.title[0] : undefined,
+            url: entry.link && entry.link.length > 0 ? entry.link[0].$.href : undefined,
+        }));
+        return mappedData;
+    },
 
     'Bitcoin': (_configAndData) => { return {}; },
 
     'HackerNews': (configAndData: ISectionConfig & ISectionParsed<IRss>) => {
-        const mappedData = configAndData.result.rss.channel.map(chan => {
-            return chan.item.map<ISectionData>(itm => ({
+        const mappedData = configAndData.result.rss.channel.map(chan =>
+            chan.item.map<ISectionData>(itm => ({
                 selftext: itm.description ? itm.description[0] : undefined,
                 title: itm.title ? itm.title[0] : undefined,
                 url: itm.link ? itm.link[0] : undefined,
                 comments: itm.comments ? itm.comments[0] : undefined
-            }));
-        });
+            }))
+        );
         const flat: ISectionData[] = [].concat.apply([], mappedData);
         return flat;
     },
 
     [DEFAULT_MAPPER]: (configAndData: ISectionConfig & ISectionParsed<IRss>) => {
-        const mappedData = configAndData.result.rss.channel.map(chan => {
-            return chan.item.map<ISectionData>(itm => ({
+        const mappedData = configAndData.result.rss.channel.map(chan =>
+            chan.item.map<ISectionData>(itm => ({
                 selftext: itm.description ? itm.description[0] : undefined,
                 title: itm.title ? itm.title[0] : undefined,
                 url: itm.link ? itm.link[0] : undefined
-            }));
-        });
+            }))
+        );
         const flat: ISectionData[] = [].concat.apply([], mappedData);
         return flat;
     }
