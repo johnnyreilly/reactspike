@@ -34,20 +34,34 @@ interface ISectionParsed<TResult = any> {
     result?: TResult;
     error?: any;
 }
-/*
-interface ISectionData {
-    name: string;
-    over18: boolean;
-    postHint: string;
-    url: string;
-    comments: string;
-    title: string;
-    stickied: boolean;
-    thumbnail: string;
-    subreddit: string;
-    ups: string;
+
+interface IRss {
+    rss: {
+        channel: {
+            item: {
+                description: string[];
+                title: string[];
+                link: string[];
+                comments: string[];
+            }[];
+        }[];
+    };
 }
-*/
+
+interface ISectionData {
+    title: string;
+    selftext: string;
+    url: string;
+    comments?: string;
+    name?: string;
+    over18?: boolean;
+    postHint?: string;
+    stickied?: boolean;
+    thumbnail?: string;
+    subreddit?: string;
+    ups?: string;
+}
+
 const readFileAsync = util.promisify(fs.readFile);
 const readdirAsync = util.promisify(fs.readdir);
 const writeFileAsync = util.promisify(fs.writeFile);
@@ -142,27 +156,28 @@ const mappers: { [sectionName: string]: (configAndData: ISectionConfig & ISectio
 
     'Bitcoin': (_configAndData) => { return {}; },
 
-    'HackerNews': (_configAndData) => { return {}; },
-
-    [DEFAULT_MAPPER]: (configAndData: ISectionConfig & ISectionParsed<{
-        rss: {
-            channel: {
-                item: {
-                    description: string[];
-                    title: string[];
-                    link: string[];
-                }[];
-            }[];
-        }
-    }>) => {
+    'HackerNews': (configAndData: ISectionConfig & ISectionParsed<IRss>) => {
         const mappedData = configAndData.result.rss.channel.map(chan => {
-            return chan.item.map(itm => ({
-                selftext: itm.description ? itm.description[0] : 'nada',
-                title: itm.title ? itm.title[0] : 'nada',
-                url: itm.link ? itm.link[0] : 'nada'
+            return chan.item.map<ISectionData>(itm => ({
+                selftext: itm.description ? itm.description[0] : undefined,
+                title: itm.title ? itm.title[0] : undefined,
+                url: itm.link ? itm.link[0] : undefined,
+                comments: itm.comments ? itm.comments[0] : undefined
             }));
         });
-        const flat: { selftext: string; title: string; url: string; }[] = [].concat.apply([], mappedData);
+        const flat: ISectionData[] = [].concat.apply([], mappedData);
+        return flat;
+    },
+
+    [DEFAULT_MAPPER]: (configAndData: ISectionConfig & ISectionParsed<IRss>) => {
+        const mappedData = configAndData.result.rss.channel.map(chan => {
+            return chan.item.map<ISectionData>(itm => ({
+                selftext: itm.description ? itm.description[0] : undefined,
+                title: itm.title ? itm.title[0] : undefined,
+                url: itm.link ? itm.link[0] : undefined
+            }));
+        });
+        const flat: ISectionData[] = [].concat.apply([], mappedData);
         return flat;
     }
 };
