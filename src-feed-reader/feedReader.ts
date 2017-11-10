@@ -116,6 +116,13 @@ interface ISectionData {
     ups?: number;
 }
 
+interface ISectionDataBitcoin {
+    symbol: string;
+    amount: string;
+    code: string;
+    country: string;
+}
+
 interface IPinboard {
     u: string;
     d: string;
@@ -123,6 +130,17 @@ interface IPinboard {
     dt: string;
     a: string;
     t: string[];
+}
+
+interface IBitcoin {
+    bpi: {
+        [currencyCode: string]: {
+            code: string;
+            symbol: string;
+            rate: string;
+            description: string;
+        }
+    };
 }
 
 const readFileAsync = util.promisify(fs.readFile);
@@ -214,7 +232,7 @@ const mappers: { [sectionName: string]: (configAndData: ISectionConfig & ISectio
             comments: `https://reddit.com${child.data.permalink}`,
             postHint: child.data.post_hint === 'rich:video' ? 'video' : child.data.post_hint,
             thumbnail: child.data.preview && child.data.preview.images.length > 0 && child.data.preview.images[0].resolutions.length > 0
-                ? child.data.preview.images[0].resolutions[child.data.preview.images[0].resolutions.length - 1].url 
+                ? child.data.preview.images[0].resolutions[child.data.preview.images[0].resolutions.length - 1].url
                 : undefined,
             selftext: child.data.selftext,
             subreddit: child.data.subreddit,
@@ -262,7 +280,18 @@ const mappers: { [sectionName: string]: (configAndData: ISectionConfig & ISectio
         return mappedData;
     },
 
-    'Bitcoin': (_configAndData) => { return {}; },
+    'Bitcoin': (configAndData: ISectionConfig & ISectionParsed<IBitcoin>) => {
+        const mappedData = Object.keys(configAndData.result.bpi).map<ISectionDataBitcoin>(currencyCode => {
+            const currency = configAndData.result.bpi[currencyCode];
+            return {
+                symbol: currency.symbol,
+                amount: currency.rate,
+                code: currency.code,
+                country: currency.symbol
+            };
+        });
+        return mappedData;
+    },
 
     'HackerNews': (configAndData: ISectionConfig & ISectionParsed<IRss>) => {
         const mappedData = configAndData.result.rss.channel.map(chan =>
