@@ -35,17 +35,25 @@ interface ISectionParsed<TResult = any> {
     error?: any;
 }
 
+interface ISlashdot {
+    'rdf:RDF': {
+        item: IItem[];
+    };
+}
+
 interface IRss {
     rss: {
         channel: {
-            item: {
-                description: string[];
-                title: string[];
-                link: string[];
-                comments: string[];
-            }[];
+            item: IItem[];
         }[];
     };
+}
+
+interface IItem {
+    description: string[];
+    title: string[];
+    link: string[];
+    comments?: string[];
 }
 
 interface IAtomRss {
@@ -167,7 +175,14 @@ const mappers: { [sectionName: string]: (configAndData: ISectionConfig & ISectio
 
     'Pinboard': (_configAndData) => { return {}; },
 
-    'Slashdot': (_configAndData) => { return {}; },
+    'Slashdot': (configAndData: ISectionConfig & ISectionParsed<ISlashdot>) => {
+        const mappedData = configAndData.result['rdf:RDF'].item.map<ISectionData>(itm => ({
+            selftext: itm.description ? itm.description[0] : undefined,
+            title: itm.title ? itm.title[0] : undefined,
+            url: itm.link ? itm.link[0] : undefined
+        }));
+        return mappedData;
+    },
 
     'TheRegister': (configAndData: ISectionConfig & ISectionParsed<IAtomRss>) => {
         const mappedData = configAndData.result.feed.entry.map<ISectionData>(entry => ({
