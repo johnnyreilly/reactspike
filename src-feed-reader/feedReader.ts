@@ -89,6 +89,15 @@ interface ISectionData {
     ups?: string;
 }
 
+interface IPinboard {
+    u: string;
+    d: string;
+    n: string;
+    dt: string;
+    a: string;
+    t: string[];
+}
+
 const readFileAsync = util.promisify(fs.readFile);
 const readdirAsync = util.promisify(fs.readdir);
 const writeFileAsync = util.promisify(fs.writeFile);
@@ -173,7 +182,14 @@ const DEFAULT_MAPPER = '__defaultMapper';
 const mappers: { [sectionName: string]: (configAndData: ISectionConfig & ISectionParsed) => any } = {
     'Reddit': (_configAndData) => { return {}; },
 
-    'Pinboard': (_configAndData) => { return {}; },
+    'Pinboard': (configAndData: ISectionConfig & ISectionParsed<IPinboard[]>) => {
+        const mappedData = configAndData.result.map<ISectionData>(itm => ({
+            selftext: itm.n ? itm.n : itm.d,
+            title: itm.d ? itm.d : itm.n,
+            url: itm.u
+        }));
+        return mappedData;
+    },
 
     'Slashdot': (configAndData: ISectionConfig & ISectionParsed<ISlashdot>) => {
         const mappedData = configAndData.result['rdf:RDF'].item.map<ISectionData>(itm => ({
