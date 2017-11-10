@@ -48,10 +48,13 @@ interface IRss {
     };
 }
 
-interface IVergeRss {
+interface IAtomRss {
     feed: {
         entry: {
             content: {
+                _: string;
+            }[];
+            summary: {
                 _: string;
             }[];
             title: string[];
@@ -166,9 +169,16 @@ const mappers: { [sectionName: string]: (configAndData: ISectionConfig & ISectio
 
     'Slashdot': (_configAndData) => { return {}; },
 
-    'TheRegister': (_configAndData) => { return {}; },
+    'TheRegister': (configAndData: ISectionConfig & ISectionParsed<IAtomRss>) => {
+        const mappedData = configAndData.result.feed.entry.map<ISectionData>(entry => ({
+            selftext: entry.summary && entry.summary.length > 0 ? entry.summary[0]._ : undefined,
+            title: entry.title && entry.title.length > 0 ? entry.title[0] : undefined,
+            url: entry.link && entry.link.length > 0 ? entry.link[0].$.href : undefined,
+        }));
+        return mappedData;
+    },
 
-    'TheVerge': (configAndData: ISectionConfig & ISectionParsed<IVergeRss>) => {
+    'TheVerge': (configAndData: ISectionConfig & ISectionParsed<IAtomRss>) => {
         const mappedData = configAndData.result.feed.entry.map<ISectionData>(entry => ({
             selftext: entry.content && entry.content.length > 0 ? entry.content[0]._ : undefined,
             title: entry.title && entry.title.length > 0 ? entry.title[0] : undefined,
