@@ -35,6 +35,32 @@ interface ISectionParsed<TResult = any> {
     error?: any;
 }
 
+interface IReddit {
+    data: {
+        children: {
+            data: {
+                num_comments: number;
+                over_18: boolean;
+                permalink: string;
+                post_hint: 'rich:video' | 'image' | 'text';
+                preview: {
+                    images: {
+                        resolutions: {
+                            url: string;
+                        }[];
+                    }[];
+                };
+                selftext: string;
+                subreddit: string;
+                stickied: boolean;
+                title: string;
+                url: string;
+                ups: number;
+            }
+        }[];
+    };
+}
+
 interface ISlashdot {
     'rdf:RDF': {
         item: IItem[];
@@ -80,13 +106,14 @@ interface ISectionData {
     selftext: string;
     url: string;
     comments?: string;
+    numComments?: number;
     name?: string;
     over18?: boolean;
     postHint?: string;
     stickied?: boolean;
     thumbnail?: string;
     subreddit?: string;
-    ups?: string;
+    ups?: number;
 }
 
 interface IPinboard {
@@ -180,7 +207,24 @@ async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike)
 
 const DEFAULT_MAPPER = '__defaultMapper';
 const mappers: { [sectionName: string]: (configAndData: ISectionConfig & ISectionParsed) => any } = {
-    'Reddit': (_configAndData) => { return {}; },
+    'Reddit': (configAndData: ISectionConfig & ISectionParsed<IReddit>) => {
+        const mappedData = configAndData.result.data.children.map<ISectionData>(child => ({
+            numComments: child.data.num_comments,
+            over18: child.data.over_18,
+            comments: `https://reddit.com${child.data.permalink}`,
+            postHint: child.data.post_hint === 'rich:video' ? 'video' : child.data.post_hint,
+            thumbnail: child.data.preview && child.data.preview.images.length > 0 && child.data.preview.images[0].resolutions.length > 0
+                ? child.data.preview.images[0].resolutions[child.data.preview.images[0].resolutions.length - 1].url 
+                : undefined,
+            selftext: child.data.selftext,
+            subreddit: child.data.subreddit,
+            stickied: child.data.stickied,
+            title: child.data.title,
+            url: child.data.url,
+            ups: child.data.ups,
+        }));
+        return mappedData;
+    },
 
     'Pinboard': (configAndData: ISectionConfig & ISectionParsed<IPinboard[]>) => {
         const mappedData = configAndData.result.map<ISectionData>(itm => ({
