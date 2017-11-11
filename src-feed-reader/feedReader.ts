@@ -5,18 +5,12 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as util from 'util';
 import {
-    ISpike,
-    ISectionConfig,
+    ISpikeConfig,
     ISectionParsed,
-    IReddit,
-    ISlashdot,
-    IRss,
-    IAtomRss,
-    IBitcoin,
-    IPinboard,
-    ISectionData,
-    ISectionDataBitcoin
+    Section,
+    ISpike
 } from './interfaces';
+import { mapData } from './mappers';
 
 const readFileAsync = util.promisify(fs.readFile);
 const readdirAsync = util.promisify(fs.readdir);
@@ -49,7 +43,7 @@ async function saveData(filename: string, data: string) {
     }
 }
 
-async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike) {
+async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpikeConfig) {
     const configAndDatas = await Promise.all(spike.sectionConfig.map(async config => {
         const result = await fetchFeed(config.feed);
         if (result.text && config.type === 'xml') {
@@ -83,123 +77,31 @@ async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpike)
         );
     }));
 
-    const transformedData = configAndDatas.map(configAndData => {
-        if (configAndData.error) {
-            return configAndData;
-        }
+    const sections = configAndDatas.map<Section>(configAndData =>
+        Object.assign(
+            {},
+            configAndData,
+            { result: undefined }, // Don't include the rss feed data
+            configAndData.error
+                ? undefined
+                : mapData(configAndData))
+    );
 
-        const mapper = mappers[configAndData.name] || mappers[DEFAULT_MAPPER];
-        return Object.assign({}, configAndData, { data: mapper(configAndData), result: undefined });
+    const transformedSpike: ISpike = Object.assign({}, spike, {
+        generatedAt: new Date().toISOString(),
+        sectionConfig: undefined,
+        sections
     });
 
-    await saveData(spikeConfigJsonFilename, JSON.stringify({
-        generatedAt: new Date().toISOString(),
-        transformedData
-    }));
+    await saveData(spikeConfigJsonFilename, JSON.stringify(transformedSpike));
 }
-
-const DEFAULT_MAPPER = '__defaultMapper';
-const mappers: { [sectionName: string]: (configAndData: ISectionConfig & ISectionParsed) => any } = {
-    'Reddit': (configAndData: ISectionConfig & ISectionParsed<IReddit>) => {
-        const mappedData = configAndData.result.data.children.map<ISectionData>(child => ({
-            numComments: child.data.num_comments,
-            over18: child.data.over_18,
-            comments: `https://reddit.com${child.data.permalink}`,
-            postHint: child.data.post_hint === 'rich:video' ? 'video' : child.data.post_hint,
-            thumbnail: child.data.preview && child.data.preview.images.length > 0 && child.data.preview.images[0].resolutions.length > 0
-                ? child.data.preview.images[0].resolutions[child.data.preview.images[0].resolutions.length - 1].url
-                : undefined,
-            selftext: child.data.selftext,
-            subreddit: child.data.subreddit,
-            stickied: child.data.stickied,
-            title: child.data.title,
-            url: child.data.url,
-            ups: child.data.ups,
-        }));
-        return mappedData;
-    },
-
-    'Pinboard': (configAndData: ISectionConfig & ISectionParsed<IPinboard[]>) => {
-        const mappedData = configAndData.result.map<ISectionData>(itm => ({
-            selftext: itm.n ? itm.n : itm.d,
-            title: itm.d ? itm.d : itm.n,
-            url: itm.u
-        }));
-        return mappedData;
-    },
-
-    'Slashdot': (configAndData: ISectionConfig & ISectionParsed<ISlashdot>) => {
-        const mappedData = configAndData.result['rdf:RDF'].item.map<ISectionData>(itm => ({
-            selftext: itm.description ? itm.description[0] : undefined,
-            title: itm.title ? itm.title[0] : undefined,
-            url: itm.link ? itm.link[0] : undefined
-        }));
-        return mappedData;
-    },
-
-    'TheRegister': (configAndData: ISectionConfig & ISectionParsed<IAtomRss>) => {
-        const mappedData = configAndData.result.feed.entry.map<ISectionData>(entry => ({
-            selftext: entry.summary && entry.summary.length > 0 ? entry.summary[0]._ : undefined,
-            title: entry.title && entry.title.length > 0 ? entry.title[0] : undefined,
-            url: entry.link && entry.link.length > 0 ? entry.link[0].$.href : undefined,
-        }));
-        return mappedData;
-    },
-
-    'TheVerge': (configAndData: ISectionConfig & ISectionParsed<IAtomRss>) => {
-        const mappedData = configAndData.result.feed.entry.map<ISectionData>(entry => ({
-            selftext: entry.content && entry.content.length > 0 ? entry.content[0]._ : undefined,
-            title: entry.title && entry.title.length > 0 ? entry.title[0] : undefined,
-            url: entry.link && entry.link.length > 0 ? entry.link[0].$.href : undefined,
-        }));
-        return mappedData;
-    },
-
-    'Bitcoin': (configAndData: ISectionConfig & ISectionParsed<IBitcoin>) => {
-        const mappedData = Object.keys(configAndData.result.bpi).map<ISectionDataBitcoin>(currencyCode => {
-            const currency = configAndData.result.bpi[currencyCode];
-            return {
-                symbol: currency.symbol,
-                amount: currency.rate,
-                code: currency.code,
-                country: currency.symbol
-            };
-        });
-        return mappedData;
-    },
-
-    'HackerNews': (configAndData: ISectionConfig & ISectionParsed<IRss>) => {
-        const mappedData = configAndData.result.rss.channel.map(chan =>
-            chan.item.map<ISectionData>(itm => ({
-                selftext: itm.description ? itm.description[0] : undefined,
-                title: itm.title ? itm.title[0] : undefined,
-                url: itm.link ? itm.link[0] : undefined,
-                comments: itm.comments ? itm.comments[0] : undefined
-            }))
-        );
-        const flat: ISectionData[] = [].concat.apply([], mappedData);
-        return flat;
-    },
-
-    [DEFAULT_MAPPER]: (configAndData: ISectionConfig & ISectionParsed<IRss>) => {
-        const mappedData = configAndData.result.rss.channel.map(chan =>
-            chan.item.map<ISectionData>(itm => ({
-                selftext: itm.description ? itm.description[0] : undefined,
-                title: itm.title ? itm.title[0] : undefined,
-                url: itm.link ? itm.link[0] : undefined
-            }))
-        );
-        const flat: ISectionData[] = [].concat.apply([], mappedData);
-        return flat;
-    }
-};
 
 async function main() {
     try {
         const spikeConfigJsonFilenames = await readdirAsync(spikeConfigsPath);
         await spikeConfigJsonFilenames.forEach(async spikeConfigJsonFilename => {
             const spikeJson = await readFileAsync(path.join(spikeConfigsPath, spikeConfigJsonFilename), 'utf8');
-            const spike: ISpike = JSON.parse(spikeJson);
+            const spike: ISpikeConfig = JSON.parse(spikeJson);
             await generateSpikeData(spikeConfigJsonFilename, spike);
         });
     } catch (error) {

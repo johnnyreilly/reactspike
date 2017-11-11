@@ -71,6 +71,11 @@ const browserConfig = {
                 urlPattern: new RegExp(PUBLIC_URL + '\/(\\w*)\$'),
                 handler: 'networkFirst',
                 options: { cacheName: 'html-cache' }
+            }, {
+                // match json paths under the website eg https://reactspike.azurewebsites.net/home.json
+                urlPattern: new RegExp(PUBLIC_URL + '\/(.*\.json)\$'),
+                handler: 'networkFirst',
+                options: { cacheName: 'json-cache' }
             }]
         }),
 

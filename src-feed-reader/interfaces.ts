@@ -1,5 +1,14 @@
 // TODO: Share this between job and app
-export interface ISpike {
+export interface ISpikeConfig extends ISpikeCommon {
+    sectionConfig: ISectionConfig[];
+}
+
+export interface ISpike extends ISpikeCommon {
+    generatedAt: string;
+    sections: Section[];
+}
+
+interface ISpikeCommon {
     spikeName: string;
     spikeShortName: string;
     spikeUrl: string;
@@ -7,9 +16,9 @@ export interface ISpike {
     spikeDescription: string;
     spikeHeaderBG: string;
     spikeBodyBG: string;
-
-    sectionConfig: ISectionConfig[];
 }
+
+export type Section = ISectionConfig & ISectionParsed & ISectionMapped;
 
 export interface ISectionConfig {
     name: string;
@@ -138,4 +147,9 @@ export interface ISectionDataBitcoin {
     amount: string;
     code: string;
     country: string;
+}
+
+export interface ISectionMapped { 
+    data?: ISectionData[]; 
+    dataBitcoin?: ISectionDataBitcoin[];
 }
