@@ -4,12 +4,13 @@ import {
     IReddit,
     ISlashdot,
     IRss,
-    IAtomRss,
     IBitcoin,
     IPinboard,
     ISectionData,
     ISectionDataBitcoin,
-    ISectionMapped
+    ISectionMapped,
+    ITheRegister,
+    ITheVerge
 } from './interfaces';
 import { strip_tags } from './stripTags';
 
@@ -52,16 +53,16 @@ const slashdotMapper: Mapper<ISlashdot> = configAndData => {
     return { data };
 };
 
-const theRegisterMapper: Mapper<IAtomRss> = configAndData => {
+const theRegisterMapper: Mapper<ITheRegister> = configAndData => {
     const data = configAndData.result.feed.entry.map<ISectionData>(entry => ({
         selftext: entry.summary && entry.summary.length > 0 ? entry.summary[0]._ : undefined,
-        title: entry.title && entry.title.length > 0 ? entry.title[0] : undefined,
+        title: entry.title && entry.title.length > 0 ? entry.title[0]._ : undefined,
         url: entry.link && entry.link.length > 0 ? entry.link[0].$.href : undefined,
     }));
     return { data };
 };
 
-const theVergeMapper: Mapper<IAtomRss> = configAndData => {
+const theVergeMapper: Mapper<ITheVerge> = configAndData => {
     const data = configAndData.result.feed.entry.map<ISectionData>(entry => ({
         selftext: entry.content && entry.content.length > 0 ? entry.content[0]._ : undefined,
         title: entry.title && entry.title.length > 0 ? entry.title[0] : undefined,

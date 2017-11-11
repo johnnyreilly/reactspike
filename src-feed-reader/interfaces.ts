@@ -86,16 +86,31 @@ interface IItem {
     comments?: string[];
 }
 
-export interface IAtomRss {
+export interface ITheVerge {
     feed: {
         entry: {
             content: {
                 _: string;
             }[];
+            title: string[];
+            link: {
+                $: {
+                    href: string;
+                }
+            }[];
+        }[];
+    };
+}
+
+export interface ITheRegister {
+    feed: {
+        entry: {
             summary: {
                 _: string;
             }[];
-            title: string[];
+            title: {
+                _: string;
+            }[];
             link: {
                 $: {
                     href: string;

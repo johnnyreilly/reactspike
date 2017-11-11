@@ -81,7 +81,7 @@ async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpikeC
         Object.assign(
             {},
             configAndData,
-            // { result: undefined }, // Don't include the rss feed data
+            { result: undefined }, // Don't include the rss feed data
             configAndData.error
                 ? undefined
                 : mapData(configAndData))
