@@ -28,6 +28,7 @@ async function boot() {
         if (contentType && contentType.includes('application/json')) {
             const json: ISpike = await response.json();
             render(App, json);
+            return;
         }
         throw new TypeError(`Oops, we haven't got JSON from {jsonRequired}!`);
     } catch (error) {

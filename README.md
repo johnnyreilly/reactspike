@@ -36,3 +36,13 @@ If you'd like to run the production build locally then:
 ```
 
 Please note, the production build ships with a service worker for offline use.  
+
+Finally, the app works by using JSON generated from reading multiple RSS feeds.  To generate these locally then:
+
+```shell
+    # build the readfeeds TypeScript code
+    yarn build:readfeeds
+
+    # run the compiled code
+    yarn readfeeds
+```
