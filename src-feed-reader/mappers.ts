@@ -11,6 +11,7 @@ import {
     ISectionDataBitcoin,
     ISectionMapped
 } from './interfaces';
+import { strip_tags } from './stripTags';
 
 type Mapper<TData = any> = (configAndData: ISectionConfig & ISectionParsed<TData>) => ISectionMapped;
 
@@ -76,7 +77,6 @@ const bitcoinMapper: Mapper<IBitcoin> = configAndData => {
             symbol: currency.symbol,
             amount: currency.rate,
             code: currency.code,
-            country: currency.symbol
         };
     });
     return { dataBitcoin };
@@ -120,7 +120,24 @@ const mappers: { [sectionName: string]: Mapper } = {
     [DEFAULT_MAPPER]: defaultMapper
 };
 
-export function mapData(configAndData: ISectionConfig & ISectionParsed) {
+export function mapData(configAndData: ISectionConfig & ISectionParsed): ISectionMapped {
     const mapper = mappers[configAndData.name] || mappers[DEFAULT_MAPPER];
-    return mapper(configAndData);
+    const mappedData = mapper(configAndData);
+    const stripped = mappedData.data
+        ? {
+            data: mappedData.data.map(data => {
+                try {
+                    return Object.assign({}, data, {
+                        title: data.title ? strip_tags(data.title) : data.title,
+                        selftext: data.selftext ? strip_tags(data.selftext) : data.selftext
+                    });
+                } catch (err) {
+                    // tslint:disable-next-line:no-console
+                    console.error(err, data);
+                    return data;
+                }
+            })
+        }
+        : mappedData;
+    return stripped;
 }

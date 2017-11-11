@@ -81,7 +81,7 @@ async function generateSpikeData(spikeConfigJsonFilename: string, spike: ISpikeC
         Object.assign(
             {},
             configAndData,
-            { result: undefined }, // Don't include the rss feed data
+            // { result: undefined }, // Don't include the rss feed data
             configAndData.error
                 ? undefined
                 : mapData(configAndData))
@@ -107,17 +107,6 @@ async function main() {
     } catch (error) {
         console.error('Failed to load paths from: ' + spikeConfigsPath, error);
     }
-    // theObj.sectionConfig.map(sectionConfig => sectionConfig.feed);
-
-    // const outputFilename = path.join(__dirname, 'feedOutput.json');
-    // const data = { testing: 123, at: new Date().toISOString() };
-    // fs.writeFile(outputFilename, JSON.stringify(Object.assign({}, data, JSON.parse(theJson))), (err) => {
-    //     if (err) {
-    //         console.error(err);
-    //     } else {
-    //         console.log('JSON saved to ' + outputFilename);
-    //     }
-    // });
 }
 
 main();

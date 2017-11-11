@@ -146,7 +146,6 @@ export interface ISectionDataBitcoin {
     symbol: string;
     amount: string;
     code: string;
-    country: string;
 }
 
 export interface ISectionMapped { 
