@@ -4,12 +4,13 @@ import { ISpike } from '../src-feed-reader/interfaces';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { App } from './app';
 import registerServiceWorker from './registerServiceWorker';
+import { setBootData } from './bootData';
 import './styles/main.scss';
 
 /**
  * Render the app
  */
-function render(AppComponent: React.SFC, _spike: ISpike) {
+function render(AppComponent: React.SFC) {
     const rootEl = document.getElementById('root');
     ReactDOM.hydrate(
         <Router>
@@ -27,7 +28,8 @@ async function boot() {
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
             const json: ISpike = await response.json();
-            render(App, json);
+            setBootData(json);
+            render(App);
             return;
         }
         throw new TypeError(`Oops, we haven't got JSON from {jsonRequired}!`);
