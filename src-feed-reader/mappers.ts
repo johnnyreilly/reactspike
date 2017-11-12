@@ -12,7 +12,7 @@ import {
     ITheRegister,
     ITheVerge
 } from './interfaces';
-import { strip_tags } from './stripTags';
+import { strip_tags, htmlspecialchars, htmlspecialchars_decode } from './locutusCutDown';
 
 type Mapper<TData = any> = (configAndData: ISectionConfig & ISectionParsed<TData>) => ISectionMapped;
 
@@ -129,8 +129,21 @@ export function mapData(configAndData: ISectionConfig & ISectionParsed): ISectio
             data: mappedData.data.map(data => {
                 try {
                     return Object.assign({}, data, {
-                        title: data.title ? strip_tags(data.title) : data.title,
-                        selftext: data.selftext ? strip_tags(data.selftext) : data.selftext
+                        url: data.url ? htmlspecialchars_decode(data.url) : data.url,
+                        comments: data.comments ? htmlspecialchars_decode(data.comments) : data.comments,
+                        
+                        title: data.title
+                            ? strip_tags(data.title)
+                                .trim()
+                                .substr(0, 340)
+                            : data.title,
+
+                        selftext: data.selftext
+                            ? htmlspecialchars(strip_tags(data.selftext), 'ENT_QUOTES')
+                                .replace(/\s+/g, ' ')
+                                .trim()
+                                .substr(0, 340)
+                            : data.selftext
                     });
                 } catch (err) {
                     // tslint:disable-next-line:no-console
