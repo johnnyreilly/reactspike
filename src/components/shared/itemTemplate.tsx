@@ -7,11 +7,11 @@ export const ItemTemplate: React.SFC<ISectionData> = data => {
     }
 
     return (
-        <li className={`${data.postHint || ''} ${data.over18 ? 'nsfw' : ''}`}>
+        <li className={[data.postHint, data.over18 ? 'nsfw' : ''].filter(classy => classy).join(' ') || null}>
             <a
                 href={data.url}
                 className="story-title"
-                data-title={`${data.selftext || ''} ${data.subreddit || ''} ${data.ups || ''}`}
+                data-title={[data.selftext, data.subreddit, data.ups].filter(classy => classy).join(' ') || null}
             >
                 {data.title}
             </a>
