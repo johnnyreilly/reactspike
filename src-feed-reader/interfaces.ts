@@ -43,7 +43,7 @@ export interface IReddit {
     data: {
         children: {
             data: {
-                num_comments: number;
+                // num_comments: number;
                 over_18: boolean;
                 permalink: string;
                 post_hint: 'rich:video' | 'image' | 'text';
@@ -147,8 +147,7 @@ export interface ISectionData {
     selftext: string;
     url: string;
     comments?: string;
-    numComments?: number;
-    name?: string;
+    // numComments?: number;
     over18?: boolean;
     postHint?: string;
     stickied?: boolean;

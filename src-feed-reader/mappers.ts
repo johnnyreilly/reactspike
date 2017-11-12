@@ -18,7 +18,7 @@ type Mapper<TData = any> = (configAndData: ISectionConfig & ISectionParsed<TData
 
 const redditMapper: Mapper<IReddit> = configAndData => {
     const data = configAndData.result.data.children.map<ISectionData>(child => ({
-        numComments: child.data.num_comments,
+        // numComments: child.data.num_comments,
         over18: child.data.over_18,
         comments: `https://reddit.com${child.data.permalink}`,
         postHint: child.data.post_hint === 'rich:video' ? 'video' : child.data.post_hint,
