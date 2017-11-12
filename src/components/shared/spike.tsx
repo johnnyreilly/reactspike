@@ -17,6 +17,7 @@ interface ISpikeProps extends RouteComponentProps<{
 interface IState {
   loading?: boolean;
   error?: string;
+  menuOpen?: boolean;
   autoRefresh: boolean;
   moreOrLessChecked: { [sectionUrl: string]: boolean };
   spikeData: ISpike;
@@ -31,11 +32,13 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
     const spikeName = props.match.params.spikeName || '';
     this.state = canUseDOM
       ? {
+        menuOpen: false,
         autoRefresh: window.localStorage.getItem(AUTOREFRESH) === 'true',
         moreOrLessChecked: JSON.parse(window.localStorage.getItem(`${spikeName}_moreOrLessChecked`) || '{}'),
         spikeData: getBootData(spikeName)
       }
       : {
+        menuOpen: false,
         autoRefresh: false,
         moreOrLessChecked: {},
         spikeData: require(`../../../App_Data/jobs/triggered/create-json/dist-feed-reader/spike-data/${
@@ -45,9 +48,10 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
   }
 
   componentDidMount() {
-    if (!this.state.spikeData) {
-      this.loadData(this.props.match.params.spikeName);
-    }
+    // Necessary?
+    // if (!this.state.spikeData) {
+    //   this.loadData(this.props.match.params.spikeName);
+    // }
 
     // refresh once a minute
     if (this.state.autoRefresh && canUseDOM) {
@@ -59,6 +63,7 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
   componentWillReceiveProps(nextProps: ISpikeProps) {
     if (nextProps.match.params.spikeName !== this.props.match.params.spikeName) {
       this.loadData(nextProps.match.params.spikeName);
+      this.toggleMenu();
     }
   }
   
@@ -99,6 +104,9 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
     this.setState(_prevState => ({ moreOrLessChecked: allMoreOrLessChecked }));
   }
 
+  toggleMenu = () =>
+    this.setState(prevState => ({ menuOpen: !prevState.menuOpen }))
+
   render() {
     if (!this.state.spikeData) {
       return (<div>No data...</div>);
@@ -122,6 +130,8 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
         spikeTitle={spikeTitle}
         spikeHeaderBG={spikeHeaderBG}
         spikeUrl={spikeUrl}
+        menuOpen={this.state.menuOpen}
+        toggleMenu={this.toggleMenu}
       />,
       <main key="main" className="col-group">
         {allCols.map((col, index) => (

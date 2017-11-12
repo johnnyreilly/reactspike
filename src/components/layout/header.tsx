@@ -9,9 +9,13 @@ interface IHeaderProps {
     spikeTitle: string;
     spikeShortName: string;
     spikeName: string;
+    menuOpen: boolean;
+    toggleMenu: () => void;
 }
 
 export class Header extends React.Component<IHeaderProps> {
+    menuOpenOrClose = (_event: React.ChangeEvent<HTMLInputElement>) =>
+        this.props.toggleMenu()
 
     publicLinks = [
         { path: '/', className: 's-home', title: 'Home' },
@@ -69,7 +73,13 @@ export class Header extends React.Component<IHeaderProps> {
                 <h1 className="logo-header">{spikeName} - {spikeTitle}</h1>
 
                 <nav className="main-nav" role="navigation">
-                    <input type="checkbox" className="main-nav__checkbox" id="toggle-nav" />
+                    <input
+                        type="checkbox"
+                        className="main-nav__checkbox"
+                        id="toggle-nav"
+                        checked={this.props.menuOpen}
+                        onChange={this.menuOpenOrClose}
+                    />
                     <label htmlFor="toggle-nav" className="main-nav__label">
                         <svg className="icon main-nav__close"><use xlinkHref="#icon_x" /></svg>
                         <svg className="icon main-nav__open"><use xlinkHref="#icon_arrow" /></svg>
