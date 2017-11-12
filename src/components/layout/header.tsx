@@ -28,17 +28,18 @@ export class Header extends React.Component<IHeaderProps> {
         return (
             <header className="main-header">
 
-                <script type="application/ld+json">
-                    {
-                        JSON.stringify({
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
                             "@context": "http://schema.org",
                             "@type": "Organization",
                             "url": spikeUrl,
                             "logo": "https://readspike.com/assets/img/readspike_logo_1200x630.png",
                             "sameAs": "https://twitter.com/readspike"
                         })
-                    }
-                </script>
+                    }} 
+                />
                 <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
                     <symbol id="icon_x" viewBox="0 0 18 18">
                         <title>Close x</title>
