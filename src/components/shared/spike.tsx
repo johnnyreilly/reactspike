@@ -5,7 +5,7 @@ import { Header } from '../layout/header';
 import { Footer } from '../layout/footer';
 import { canUseDOM } from '../../canUseDOM';
 import { ISpike } from '../../../src-feed-reader/interfaces';
-import { getBootData } from '../../bootData';
+import { getBootData, getJson, setBootData } from '../../bootData';
 import { ItemTemplate } from './itemTemplate';
 import { ItemTemplateBitcoin } from './itemTemplateBitcoin';
 
@@ -15,6 +15,8 @@ interface ISpikeProps extends RouteComponentProps<{
 }
 
 interface IState {
+  loading?: boolean;
+  error?: string;
   autoRefresh: boolean;
   moreOrLessChecked: { [sectionUrl: string]: boolean };
   spikeData: ISpike;
@@ -44,7 +46,7 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
 
   componentDidMount() {
     if (!this.state.spikeData) {
-      this.loadData();
+      this.loadData(this.props.match.params.spikeName);
     }
 
     // refresh once a minute
@@ -54,33 +56,28 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
     }
   }
 
-  scheduleAutoRefresh = () => window.setInterval(() => this.loadData(), 60000);
+  componentWillReceiveProps(nextProps: ISpikeProps) {
+    if (nextProps.match.params.spikeName !== this.props.match.params.spikeName) {
+      this.loadData(nextProps.match.params.spikeName);
+    }
+  }
+  
+  scheduleAutoRefresh = () => window.setInterval(() => this.loadData(this.props.match.params.spikeName), 60000);
 
-  loadData() {
+  loadData(spikeName: string) {
     if (!canUseDOM) {
       return;
     }
 
-    // const { sectionHtmlUrl } = this.props;
-    // this.setState(_prevState => ({ loading: true }));
-    // fetch(sectionHtmlUrl)
-    //   .then(value => {
-    //     if (value.ok) {
-    //       value.text()
-    //         .then(html => {
-    //           this.setState(_prevState => ({ html, loading: false }));
-    //           // window.localStorage.setItem(sectionHtmlUrl, html);
-    //         })
-    //         .catch(error => {
-    //           this.setState(_prevState => ({ error: error.message ? error.message : error, loading: false }));
-    //         });
-    //     } else {
-    //       this.setState(_prevState => ({ error: value.statusText, loading: false }));
-    //     }
-    //   })
-    //   .catch(error => {
-    //     this.setState(_prevState => ({ error: error.message ? error.message : error, loading: false }));
-    //   });
+    this.setState(_prevState => ({ loading: true }));
+    getJson(spikeName)
+      .then(spikeData => {
+          this.setState(_prevState => ({ spikeData, loading: false }));
+          setBootData(spikeData);
+      })
+      .catch(error => {
+        this.setState(_prevState => ({ error: error.message ? error.message : error, loading: false }));
+      });
   }
 
   setAutoRefresh = (autoRefresh: boolean) => {
@@ -104,7 +101,11 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
 
   render() {
     if (!this.state.spikeData) {
-      return (<div>Loading...</div>);
+      return (<div>No data...</div>);
+    }
+
+    if (this.state.error) {
+      return (<div>Problems: {this.state.error}...</div>);
     }
 
     const { spikeName, spikeShortName, spikeUrl, spikeHeaderBG, spikeTitle, sections } = this.state.spikeData;

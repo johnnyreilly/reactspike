@@ -38,7 +38,7 @@ export class Header extends React.Component<IHeaderProps> {
                             "logo": "https://readspike.com/assets/img/readspike_logo_1200x630.png",
                             "sameAs": "https://twitter.com/readspike"
                         })
-                    }} 
+                    }}
                 />
                 <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
                     <symbol id="icon_x" viewBox="0 0 18 18">
@@ -59,7 +59,7 @@ export class Header extends React.Component<IHeaderProps> {
                     </symbol>
                 </svg>
 
-                <a href="" className="logo-link" target="_self">
+                <a href="/" className="logo-link" target="_self">
                     <svg className="logo-readspike" style={{ fill: spikeHeaderBG }}>><use xlinkHref="#logo_readspike" /></svg>
 
                     Readspike <span style={{ color: spikeHeaderBG }}>{spikeShortName}</span>
@@ -74,7 +74,7 @@ export class Header extends React.Component<IHeaderProps> {
                         <svg className="icon main-nav__close"><use xlinkHref="#icon_x" /></svg>
                         <svg className="icon main-nav__open"><use xlinkHref="#icon_arrow" /></svg>
                         Show menu
-                        </label>
+                    </label>
                     <ul className="main-nav__items">
                         {this.publicLinks.map(({ path, title, className }) => (
                             <li key={title}>
