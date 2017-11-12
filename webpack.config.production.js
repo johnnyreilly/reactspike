@@ -61,11 +61,6 @@ const browserConfig = {
             skipWaiting: true,
             // navigateFallback: 'template.html',
             runtimeCaching: [{
-                // match content from readspike.com
-                urlPattern: new RegExp('https://readspike.com'),
-                handler: 'networkFirst',
-                options: { cacheName: 'readspike-cache' }
-            }, {
                 // match empty strings and words under the website eg https://reactspike.azurewebsites.net/world
                 // - intended to cache server side rendered code
                 urlPattern: new RegExp(PUBLIC_URL + '\/(\\w*)\$'),

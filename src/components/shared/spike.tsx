@@ -9,7 +9,9 @@ import { getBootData } from '../../bootData';
 import { ItemTemplate } from './itemTemplate';
 import { ItemTemplateBitcoin } from './itemTemplateBitcoin';
 
-interface ISpikeProps extends RouteComponentProps<{}> {
+interface ISpikeProps extends RouteComponentProps<{
+  spikeName: string;
+}> {
 }
 
 interface IState {
@@ -24,17 +26,18 @@ const AUTOREFRESH = 'autoRefresh';
 export class SpikePage extends React.Component<ISpikeProps, IState> {
   constructor(props: ISpikeProps) {
     super(props);
+    const spikeName = props.match.params.spikeName || '';
     this.state = canUseDOM
       ? {
         autoRefresh: window.localStorage.getItem(AUTOREFRESH) === 'true',
-        moreOrLessChecked: JSON.parse(window.localStorage.getItem(`${props.match.url}_moreOrLessChecked`) || '{}'),
-        spikeData: getBootData(props.match.url)
+        moreOrLessChecked: JSON.parse(window.localStorage.getItem(`${spikeName}_moreOrLessChecked`) || '{}'),
+        spikeData: getBootData(spikeName)
       }
       : {
         autoRefresh: false,
         moreOrLessChecked: {},
-        spikeData: require(`../../../App_Data/jobs/triggered/create-json/dist-feed-reader/spike-data${
-          props.match.url === '/' ? '/home' : props.match.url
+        spikeData: require(`../../../App_Data/jobs/triggered/create-json/dist-feed-reader/spike-data/${
+          spikeName === '' ? 'home' : spikeName
           }.json`)
       };
   }
@@ -95,11 +98,15 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
 
   setMoreOrLessChecked = (sectionUrl: string, moreOrLessChecked: boolean) => {
     const allMoreOrLessChecked = Object.assign({ [sectionUrl]: moreOrLessChecked }, this.state.moreOrLessChecked);
-    window.localStorage.setItem(`${this.props.match.url}_moreOrLessChecked`, JSON.stringify(allMoreOrLessChecked));
+    window.localStorage.setItem(`${this.props.match.params.spikeName}_moreOrLessChecked`, JSON.stringify(allMoreOrLessChecked));
     this.setState(_prevState => ({ moreOrLessChecked: allMoreOrLessChecked }));
   }
 
   render() {
+    if (!this.state.spikeData) {
+      return (<div>Loading...</div>);
+    }
+
     const { spikeName, spikeShortName, spikeUrl, spikeHeaderBG, spikeTitle, sections } = this.state.spikeData;
     const col1s = sections.filter(section => section.col === '1');
     const col2s = sections.filter(section => section.col === '2');
@@ -135,8 +142,8 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
                   sectionConfig.name === 'Bitcoin'
                     ? sectionConfig.dataBitcoin.map(bitcoin =>
                       <ItemTemplateBitcoin key={bitcoin.code} {...bitcoin} />)
-                    : sectionConfig.data.map(data =>
-                      <ItemTemplate key={data.title} {...data} />)
+                    : sectionConfig.data.map((data, sectionIndex) =>
+                      <ItemTemplate key={sectionIndex} {...data} />)
                 }
               </Section>
             ))}
