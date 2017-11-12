@@ -11,9 +11,9 @@ sudo: false
 
 install:
   - yarn install
-  - yarn build
   - yarn build:readfeeds
   - yarn readfeeds
+  - yarn build # it's important this is last - it depends upon the readfeeds build
 
 git:
   depth: 9999999
