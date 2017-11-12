@@ -5,6 +5,7 @@ const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-web
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const { rules, extensions, browserEntry, serverEntry, output } = require('./webpack.shared');
@@ -54,13 +55,14 @@ const browserConfig = {
         // These plugins will create the HTML / CSS / FavIcon etc static assets 
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js' }),
         new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
-        new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
         new HtmlWebpackPlugin({
             filename: 'template.html',
             inject: true,
             template: 'src/template.html'
         }),
-
+        new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
+        new StyleExtHtmlWebpackPlugin(),
+        
         // Since the type checker covers both client and server code we only need a single instance 
         // of the plugin; not one for both client and server
         new ForkTsCheckerNotifierWebpackPlugin({ title: 'TypeScript', excludeWarnings: false }),

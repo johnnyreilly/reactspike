@@ -6,6 +6,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const { rules, extensions, browserEntry, serverEntry, output, DIST_DIR } = require('./webpack.shared');
@@ -32,9 +33,7 @@ const browserConfig = {
         // These plugins will create the HTML / CSS / FavIcon / ServiceWorker etc static assets 
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js' }),
         new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
-        new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
         new HtmlWebpackPlugin({
-            // hash: true,
             filename: 'template.html',
             inject: true,
             template: 'src/template.html',
@@ -50,6 +49,10 @@ const browserConfig = {
                 minifyCSS: true,
                 minifyURLs: true,
             },
+        }),
+        new ExtractTextPlugin({ filename: 'style.css', allChunks: true }),
+        new StyleExtHtmlWebpackPlugin({
+            minify: true
         }),
         new UglifyJSPlugin(),
         new WorkboxPlugin({
