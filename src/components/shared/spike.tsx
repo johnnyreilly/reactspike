@@ -139,11 +139,13 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
                 setMoreOrLessChecked={this.setMoreOrLessChecked}
               >
                 {
-                  sectionConfig.name === 'Bitcoin'
-                    ? sectionConfig.dataBitcoin.map(bitcoin =>
-                      <ItemTemplateBitcoin key={bitcoin.code} {...bitcoin} />)
-                    : sectionConfig.data.map((data, sectionIndex) =>
-                      <ItemTemplate key={sectionIndex} {...data} />)
+                  sectionConfig.error
+                    ? <div>{sectionConfig.error}</div>
+                    : sectionConfig.name === 'Bitcoin'
+                      ? sectionConfig.dataBitcoin.map(bitcoin =>
+                        <ItemTemplateBitcoin key={bitcoin.code} {...bitcoin} />)
+                      : sectionConfig.data.map((data, sectionIndex) =>
+                        <ItemTemplate key={sectionIndex} {...data} />)
                 }
               </Section>
             ))}
