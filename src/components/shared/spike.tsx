@@ -41,9 +41,11 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
         menuOpen: false,
         autoRefresh: false,
         moreOrLessChecked: {},
-        spikeData: require(`../../../App_Data/jobs/triggered/create-json/dist-feed-reader/spike-data/${
-          spikeName === '' ? 'home' : spikeName
-          }.json`)
+        spikeData: spikeName.includes('.')
+          ? undefined
+          : require(`../../../App_Data/jobs/triggered/create-json/dist-feed-reader/spike-data/${
+            spikeName === '' ? 'home' : spikeName
+            }.json`)
       };
   }
 
@@ -66,7 +68,7 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
       this.toggleMenu();
     }
   }
-  
+
   scheduleAutoRefresh = () => window.setInterval(() => this.loadData(this.props.match.params.spikeName), 60000);
 
   loadData(spikeName: string) {
@@ -77,8 +79,8 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
     this.setState(_prevState => ({ loading: true }));
     getJson(spikeName)
       .then(spikeData => {
-          this.setState(_prevState => ({ spikeData, loading: false }));
-          setBootData(spikeData);
+        this.setState(_prevState => ({ spikeData, loading: false }));
+        setBootData(spikeData);
       })
       .catch(error => {
         this.setState(_prevState => ({ error: error.message ? error.message : error, loading: false }));
