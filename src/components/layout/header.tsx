@@ -2,12 +2,6 @@
 // tslint:disable:quotemark
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { homePath } from '../features/home';
-import { worldPath } from '../features/world';
-import { londonPath } from '../features/london';
-import { brightonPath } from '../features/brighton';
-import { funnyPath } from '../features/funny';
-import { webdevPath } from '../features/webdev';
 
 interface IHeaderProps {
     spikeHeaderBG: string;
@@ -20,13 +14,13 @@ interface IHeaderProps {
 export class Header extends React.Component<IHeaderProps> {
 
     publicLinks = [
-        { path: homePath, className: 's-home', title: 'Home' },
-        { path: worldPath, className: 's-world', title: 'World' },
-        { path: londonPath, className: 's-london', title: 'London' },
-        { path: brightonPath, className: 's-brighton', title: 'Brighton' },
-        { path: funnyPath, className: 's-funny', title: 'Funny' },
-        { path: webdevPath, className: 's-webdev', title: 'WebDev' },
-        { path: homePath, className: 's-home', title: 'Feedback' },
+        { path: '/', className: 's-home', title: 'Home' },
+        { path: '/world', className: 's-world', title: 'World' },
+        { path: '/london', className: 's-london', title: 'London' },
+        { path: '/brighton', className: 's-brighton', title: 'Brighton' },
+        { path: '/funny', className: 's-funny', title: 'Funny' },
+        { path: '/webdev', className: 's-webdev', title: 'WebDev' },
+        // { path: homePath, className: 's-home', title: 'Feedback' },
     ];
 
     render() {

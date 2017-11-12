@@ -1,13 +1,3 @@
-// TODO: Share this between job and app
-export interface ISpikeConfig extends ISpikeCommon {
-    sectionConfig: ISectionConfig[];
-}
-
-export interface ISpike extends ISpikeCommon {
-    generatedAt: string;
-    sections: Section[];
-}
-
 interface ISpikeCommon {
     spikeName: string;
     spikeShortName: string;
@@ -16,6 +6,15 @@ interface ISpikeCommon {
     spikeDescription: string;
     spikeHeaderBG: string;
     spikeBodyBG: string;
+}
+
+export interface ISpikeConfig extends ISpikeCommon {
+    sectionConfig: ISectionConfig[];
+}
+
+export interface ISpike extends ISpikeCommon {
+    generatedAt: string;
+    sections: Section[];
 }
 
 export type Section = ISectionConfig & ISectionParsed & ISectionMapped;

@@ -5,8 +5,8 @@ import {
     RouteComponentProps,
     Switch
 } from 'react-router-dom';
-import { publicRoutes } from './routes';
 import { NotFound } from '../shared/notFound';
+import { SpikePage } from '../shared/spike';
 
 interface ILayoutProps extends RouteComponentProps<{}> {
 }
@@ -17,9 +17,7 @@ export class Layout extends React.Component<Partial<ILayoutProps>> {
     render() {
         return (
             <Switch key="main">
-                {publicRoutes.map(({ path, component, exact }) => (
-                    <Route key={path} exact={exact} path={path} component={component} />
-                ))}
+                <Route path={this.props.match.url} component={SpikePage}/>
                 <Route component={NotFound} />
             </Switch>
         );
