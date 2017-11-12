@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { SpikePage, ISpikeProps } from '../../shared/spike';
+import { SpikePage } from '../../shared/spike';
+import { ISpike } from '../../../../src-feed-reader/interfaces';
 
-const spikeConfig: ISpikeProps = require('../../../spike-configs/london.json');
+const spikeConfig: ISpike = require('../../../spike-configs/london.json');
 
 export const LondonPage: React.SFC<RouteComponentProps<{}>> = _props => (
   <SpikePage {...spikeConfig} />
