@@ -17,8 +17,7 @@ export class Layout extends React.Component<Partial<ILayoutProps>> {
     render() {
         return (
             <Switch key="main">
-                <Route path="/" exact={true} component={SpikePage}/>
-                <Route path="/:spikeName" exact={true} component={SpikePage}/>
+                <Route path="/:spikeName?" exact={true} component={SpikePage}/>
                 <Route component={NotFound} />
             </Switch>
         );
