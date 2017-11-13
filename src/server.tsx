@@ -43,6 +43,7 @@ readFile(templatePath, 'utf8', (err, indexHtml) => {
             console.info(`${httpVersion} ${method} ${url}`);
         }
 
+        res.set('Content-Type', 'text/html');
         res.write(indexHtmlStart);
 
         const context = {};
