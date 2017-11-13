@@ -3,6 +3,7 @@ import { readFile } from 'fs';
 import * as path from 'path';
 import * as React from 'react';
 import * as express from 'express';
+import * as compression from 'compression';
 import { StaticRouter } from 'react-router-dom';
 import { renderToNodeStream } from 'react-dom/server';
 import { App } from './app';
@@ -21,6 +22,8 @@ readFile(templatePath, 'utf8', (err, indexHtml) => {
     const [indexHtmlStart, indexHtmlEnd] = indexHtml.split('Welcome to ReadSpike. Loading...');
     const server = express();
 
+    server.use(compression());
+    
     const spikeDataJsonPath = path.resolve(__dirname, '..', 'App_Data', 'jobs', 'triggered', 'create-json', 'dist-feed-reader', 'spike-data');
     server.use(express.static(__dirname));
     server.use(express.static(spikeDataJsonPath));

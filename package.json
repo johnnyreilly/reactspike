@@ -49,6 +49,7 @@
     }
   },
   "devDependencies": {
+    "@types/compression": "^0.0.35",
     "@types/express": "^4.0.39",
     "@types/jest": "^21.0.0",
     "@types/node": "^8.0.47",
@@ -92,6 +93,7 @@
     "workbox-webpack-plugin": "^2.1.0"
   },
   "dependencies": {
+    "compression": "^1.7.1",
     "core-js": "^2.4.1",
     "express": "^4.16.2",
     "history": "^4.6.1",
