@@ -34,7 +34,7 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
       ? {
         menuOpen: false,
         autoRefresh: window.localStorage.getItem(AUTOREFRESH) === 'true',
-        moreChecked: JSON.parse(window.localStorage.getItem(`${spikeName}_moreChecked`) || '[]'),
+        moreChecked: [], // JSON.parse(window.localStorage.getItem(`${spikeName}_moreChecked`) || '[]'),
         spikeData: getBootData(spikeName)
       }
       : {
@@ -100,7 +100,7 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
       ? [...this.state.moreChecked, sectionName]
       : this.state.moreChecked.filter(checkedSectionName => checkedSectionName !== sectionName);
 
-    window.localStorage.setItem(`${this.props.match.params.spikeName}_moreChecked`, JSON.stringify(allMoreChecked));
+    // window.localStorage.setItem(`${this.props.match.params.spikeName}_moreChecked`, JSON.stringify(allMoreChecked));
     this.setState(_prevState => ({ moreChecked: allMoreChecked }));
   }
 
