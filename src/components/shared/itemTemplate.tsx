@@ -1,17 +1,21 @@
 import * as React from 'react';
 import { ISectionData } from '../../../src-feed-reader/interfaces';
 
+function spaceDelimitedStringsOrNull(...theStrings: (string | number)[]) {
+    return theStrings.filter(aString => aString).join(' ') || null;
+}
+
 export const ItemTemplate: React.SFC<ISectionData> = data => {
     if (data.stickied) {
         return null;
     }
 
     return (
-        <li className={[data.postHint, data.over18 ? 'nsfw' : ''].filter(classy => classy).join(' ') || null}>
+        <li className={spaceDelimitedStringsOrNull(data.postHint, data.over18 ? 'nsfw' : '')}>
             <a
                 href={data.url}
                 className="story-title"
-                data-title={[data.selftext, data.subreddit, data.ups].filter(classy => classy).join(' ') || null}
+                data-title={spaceDelimitedStringsOrNull(data.selftext, data.subreddit, data.ups)}
             >
                 {data.title}
             </a>

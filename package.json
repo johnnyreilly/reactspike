@@ -16,7 +16,7 @@
     "start:dev": "nodemon dist/server.js",
     "prebuild:readfeeds": "rimraf ./App_Data/**/*.*",
     "build:readfeeds": "tsc --project ./src-feed-reader",
-    "postbuild:readfeeds": "cp src-feed-reader/settings.job App_Data/jobs/triggered/create-json/dist-feed-reader/settings.job && cp -r src/spike-configs App_Data/jobs/triggered/create-json/dist-feed-reader && mkdirp App_Data/jobs/triggered/create-json/dist-feed-reader/spike-data",
+    "postbuild:readfeeds": "cp src-feed-reader/settings.job App_Data/jobs/triggered/create-json/dist-feed-reader/settings.job && cp -r src-feed-reader/spike-configs App_Data/jobs/triggered/create-json/dist-feed-reader && mkdirp App_Data/jobs/triggered/create-json/dist-feed-reader/spike-data",
     "readfeeds": "node App_Data/jobs/triggered/create-json/dist-feed-reader/feedReader.js",
     "prewatch": "rimraf ./dist/*",
     "watch": "webpack --watch --progress --color --config webpack.config.development.js",
