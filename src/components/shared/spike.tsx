@@ -19,7 +19,7 @@ interface IState {
   error?: string;
   menuOpen?: boolean;
   autoRefresh: boolean;
-  moreOrLessChecked: { [sectionUrl: string]: boolean };
+  moreChecked: string[];
   spikeData: ISpike;
   intervalHandle?: number;
 }
@@ -34,13 +34,13 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
       ? {
         menuOpen: false,
         autoRefresh: window.localStorage.getItem(AUTOREFRESH) === 'true',
-        moreOrLessChecked: JSON.parse(window.localStorage.getItem(`${spikeName}_moreOrLessChecked`) || '{}'),
+        moreChecked: JSON.parse(window.localStorage.getItem(`${spikeName}_moreChecked`) || '[]'),
         spikeData: getBootData(spikeName)
       }
       : {
         menuOpen: false,
         autoRefresh: false,
-        moreOrLessChecked: {},
+        moreChecked: [],
         spikeData: spikeName.includes('.')
           ? undefined
           : require(`../../../App_Data/jobs/triggered/create-json/dist-feed-reader/spike-data/${
@@ -50,11 +50,6 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
   }
 
   componentDidMount() {
-    // Necessary?
-    // if (!this.state.spikeData) {
-    //   this.loadData(this.props.match.params.spikeName);
-    // }
-
     // refresh once a minute
     if (this.state.autoRefresh && canUseDOM) {
       const intervalHandle = this.scheduleAutoRefresh();
@@ -100,10 +95,13 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
     }
   }
 
-  setMoreOrLessChecked = (sectionUrl: string, moreOrLessChecked: boolean) => {
-    const allMoreOrLessChecked = Object.assign({ [sectionUrl]: moreOrLessChecked }, this.state.moreOrLessChecked);
-    window.localStorage.setItem(`${this.props.match.params.spikeName}_moreOrLessChecked`, JSON.stringify(allMoreOrLessChecked));
-    this.setState(_prevState => ({ moreOrLessChecked: allMoreOrLessChecked }));
+  setMoreIsChecked = (sectionName: string, moreChecked: boolean) => {
+    const allMoreChecked = moreChecked
+      ? [...this.state.moreChecked, sectionName]
+      : this.state.moreChecked.filter(checkedSectionName => checkedSectionName !== sectionName);
+
+    window.localStorage.setItem(`${this.props.match.params.spikeName}_moreChecked`, JSON.stringify(allMoreChecked));
+    this.setState(_prevState => ({ moreChecked: allMoreChecked }));
   }
 
   toggleMenu = () =>
@@ -148,8 +146,8 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
                 sectionUrl={sectionConfig.url}
                 spikeShortName={spikeShortName}
                 autoRefresh={this.state.autoRefresh}
-                moreOrLessChecked={this.state.moreOrLessChecked[sectionConfig.url]}
-                setMoreOrLessChecked={this.setMoreOrLessChecked}
+                moreIsChecked={this.state.moreChecked}
+                setMoreIsChecked={this.setMoreIsChecked}
               >
                 {
                   sectionConfig.error
