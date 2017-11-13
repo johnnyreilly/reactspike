@@ -6,7 +6,6 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const { rules, extensions, browserEntryDev, serverEntry, output } = require('./webpack.shared');
 
@@ -54,8 +53,8 @@ const browserConfig = {
 
         // These plugins will create the HTML / CSS / FavIcon etc static assets 
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js' }),
-        new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
         new HtmlWebpackPlugin({
+            favicon: 'src/favicon.ico',
             filename: 'template.html',
             inject: true,
             template: 'src/template.html'

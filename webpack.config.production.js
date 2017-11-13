@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
@@ -32,9 +31,9 @@ const browserConfig = {
         definedVariables,
 
         // These plugins will create the HTML / CSS / FavIcon / ServiceWorker etc static assets 
-        new FaviconsWebpackPlugin('./src/apple-touch-icon.png'),
         new HtmlWebpackPlugin({
             filename: 'template.html',
+            favicon: 'src/favicon.ico',
             inject: true,
             template: 'src/template.html',
             minify: {
