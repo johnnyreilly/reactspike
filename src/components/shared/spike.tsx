@@ -151,7 +151,7 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
               >
                 {
                   sectionConfig.error
-                    ? <div>{sectionConfig.error}</div>
+                    ? <div>{sectionConfig.error.message ? sectionConfig.error.message : JSON.stringify(sectionConfig.error)}</div>
                     : sectionConfig.name === 'Bitcoin'
                       ? sectionConfig.dataBitcoin.map(bitcoin =>
                         <ItemTemplateBitcoin key={bitcoin.code} {...bitcoin} />)
