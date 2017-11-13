@@ -8,7 +8,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
-const { rules, extensions, browserEntry, serverEntry, output } = require('./webpack.shared');
+const { rules, extensions, browserEntryDev, serverEntry, output } = require('./webpack.shared');
 
 // * Only necessary until https://github.com/Realytics/fork-ts-checker-webpack-plugin/pull/48 has been merged and released
 // START 
@@ -38,7 +38,7 @@ const definedVariables = new webpack.DefinePlugin({
 });
 
 const browserConfig = {
-    entry: browserEntry,
+    entry: browserEntryDev,
 
     output,
 

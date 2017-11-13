@@ -49,11 +49,21 @@ function makeVendorEntry(config) {
     return vendorModulesMinusExclusions;
 }
 
-const browser = [ './src/browser.tsx' ];
-const vendor = makeVendorEntry({ mainModules: browser, modulesToExclude: ['compression', 'express', 'xml2js'] })
+const browser = './src/browser.tsx';
+const vendor = makeVendorEntry({ mainModules: [browser], modulesToExclude: ['compression', 'express', 'xml2js'] })
 
-exports.browserEntry = { vendor, browser };
-exports.serverEntry = { server: './src/server.tsx' };
+exports.browserEntryDev = { 
+    vendor, 
+    browser: [browser] 
+};
+
+exports.browserEntryProd = { 
+    browser: ['core-js', browser] 
+};
+
+exports.serverEntry = { 
+    server: './src/server.tsx' 
+};
 
 exports.extensions = ['.ts', '.tsx', '.js', '.jsx'];
 
