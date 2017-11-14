@@ -31,9 +31,8 @@ export class Section extends React.Component<ISectionProps> {
                 </a></h2>
                 <input type="checkbox" className="toggle-list" id={id} onChange={this.moreOrLess} checked={checked} />
                 <label htmlFor={id} className="toggler-header fadeInTogglers" style={{ opacity: 0 }}>Show/hide</label>
-                <ol className={`links-list links-list--${sectionNameLower}`}>
-                    {this.props.children}
-                </ol>
+
+                {this.props.children}
 
                 <label htmlFor={id} className="toggler-footer fadeInTogglers" style={{ opacity: 0 }}>Show/hide
                 <svg className="icon"><use xlinkHref="#icon_arrow" /></svg>

@@ -136,27 +136,30 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
       <main key="main" className="col-group">
         {allCols.map((col, index) => (
           <div key={index} className="col">
-            {col.map(sectionConfig => (
+            {col.map(section => (
               <Section
-                key={sectionConfig.name}
-                sectionName={sectionConfig.name}
-                sectionColor={sectionConfig.color}
-                sectionTitle={sectionConfig.title}
-                sectionRow={sectionConfig.row}
-                sectionUrl={sectionConfig.url}
+                key={section.name}
+                sectionName={section.name}
+                sectionColor={section.color}
+                sectionTitle={section.title}
+                sectionRow={section.row}
+                sectionUrl={section.url}
                 spikeShortName={spikeShortName}
                 autoRefresh={this.state.autoRefresh}
                 moreIsChecked={this.state.moreChecked}
                 setMoreIsChecked={this.setMoreIsChecked}
               >
                 {
-                  sectionConfig.error
-                    ? <div>{sectionConfig.error.message ? sectionConfig.error.message : JSON.stringify(sectionConfig.error)}</div>
-                    : sectionConfig.name === 'Bitcoin'
-                      ? sectionConfig.dataBitcoin.map(bitcoin =>
-                        <ItemTemplateBitcoin key={bitcoin.code} {...bitcoin} />)
-                      : sectionConfig.data.map(data =>
-                        <ItemTemplate key={data.url} {...data} />)
+                  section.error
+                    ? <div>{section.error.message ? section.error.message : JSON.stringify(section.error)}</div>
+                    : <ol className={`links-list links-list--${section.name.toLocaleLowerCase()}`}>
+                      {section.name === 'Bitcoin'
+                        ? section.dataBitcoin.map(bitcoin =>
+                          <ItemTemplateBitcoin key={bitcoin.code} {...bitcoin} />)
+                        : section.data.map(data =>
+                          <ItemTemplate key={data.url} {...data} />)
+                      }
+                    </ol>
                 }
               </Section>
             ))}
