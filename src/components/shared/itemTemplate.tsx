@@ -11,7 +11,7 @@ export const ItemTemplate: React.SFC<ISectionData> = data => {
     }
 
     return (
-        <li className={spaceDelimitedStringsOrNull(data.postHint, data.over18 ? 'nsfw' : '')}>
+        <li key={data.url} className={spaceDelimitedStringsOrNull(data.postHint, data.over18 ? 'nsfw' : '')}>
             <a
                 href={data.url}
                 className="story-title"
