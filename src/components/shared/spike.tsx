@@ -155,8 +155,8 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
                     : sectionConfig.name === 'Bitcoin'
                       ? sectionConfig.dataBitcoin.map(bitcoin =>
                         <ItemTemplateBitcoin key={bitcoin.code} {...bitcoin} />)
-                      : sectionConfig.data.map((data, sectionIndex) =>
-                        <ItemTemplate key={sectionIndex} {...data} />)
+                      : sectionConfig.data.map(data =>
+                        <ItemTemplate key={data.url} {...data} />)
                 }
               </Section>
             ))}
