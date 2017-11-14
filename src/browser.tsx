@@ -3,7 +3,8 @@ import * as ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { App } from './app';
 import registerServiceWorker from './registerServiceWorker';
-import { getJson, setBootData } from './bootData';
+import { setBootData } from './bootData';
+import { ISpike } from '../src-feed-reader/interfaces';
 import './styles/main.scss';
 
 /**
@@ -20,14 +21,15 @@ function render(AppComponent: React.SFC) {
 }
 
 function boot() {
-    const trimmedPath = window.location.pathname.substr(1);
-    getJson(trimmedPath).then(spike => {
-        setBootData(spike);
-        render(App);
-    }).catch(error => {
-        // tslint:disable-next-line:no-console
-        console.error(error);
-    });
+    const spike: ISpike = window['bootData'];
+//     const trimmedPath = window.location.pathname.substr(1);
+//     getJson(trimmedPath).then(spike => {
+    setBootData(spike);
+    render(App);
+    // }).catch(error => {
+    //     // tslint:disable-next-line:no-console
+    //     console.error(error);
+    // });
 }
 
 boot();

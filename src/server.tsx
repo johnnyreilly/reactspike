@@ -1,5 +1,6 @@
 // tslint:disable:no-console
 import { readFile } from 'fs';
+import * as util from 'util';
 import * as path from 'path';
 import * as React from 'react';
 import * as express from 'express';
@@ -12,56 +13,73 @@ const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 3000;
 console.info(`Server starting in ${isDev ? 'dev mode' : 'prod mode'} on port ${PORT} in ${process.cwd()} __dirname: ${__dirname} ...`);
 
-const templatePath = path.join(__dirname, 'template.html');
-readFile(templatePath, 'utf8', (err, indexHtml) => {
-    if (err) {
-        console.error('Problem loading ' + templatePath, err);
-        return;
-    }
+const readFileAsync = util.promisify(readFile);
 
-    const [indexHtmlStart, indexHtmlEnd] = indexHtml.split('Welcome to ReadSpike. Loading...');
-    const server = express();
+function spaFallback(callback: express.RequestHandler) {
+    const requestHandler: express.RequestHandler = (req, res, next) => {
+        if (req.method === 'GET' && req.accepts('html')) {
+            callback(req, res, next);
+        } else next();
+    };
+    return requestHandler;
+}
 
-    server.use(compression());
+async function startServer({ templatePath }: { templatePath: string }) {
+    try {
+        const indexHtml = await readFileAsync(templatePath, 'utf8');
+
+        const [indexHtmlStart, indexHtmlEnd] = indexHtml.split('Welcome to ReadSpike. Loading...');
+        const server = express();
     
-    const spikeDataJsonPath = path.resolve(__dirname, '..', 'App_Data', 'jobs', 'triggered', 'create-json', 'dist-feed-reader', 'spike-data');
-    server.use(express.static(__dirname));
-    server.use(express.static(spikeDataJsonPath));
+        server.use(compression());
+        
+        const spikeDataJsonPath = path.resolve(__dirname, '..', 'App_Data', 'jobs', 'triggered', 'create-json', 'dist-feed-reader', 'spike-data');
+        server.use(express.static(__dirname));
+        server.use(express.static(spikeDataJsonPath));
+        
+        server.use(spaFallback((req, res, _next) => {
+            if (isDev) {
+                const { httpVersion, method, url } = req;
+                console.info(`${httpVersion} ${method} ${url}`);
+            }
     
-    function spaFallback(callback: express.RequestHandler) {
-        const requestHandler: express.RequestHandler = (req, res, next) => {
-            if (req.method === 'GET' && req.accepts('html')) {
-                callback(req, res, next);
-            } else next();
-        };
-        return requestHandler;
-    }
+            res.set('Content-Type', 'text/html');
+            res.write(indexHtmlStart);
+    
+            const context = {};
+            const stream = renderToNodeStream(
+                <StaticRouter location={req.url} context={context}>
+                    <App />
+                </StaticRouter>
+            );
+            stream.pipe(res, { end: false });
+    
+            stream.on('end', async () => {
+                const jsonPath = path.join(spikeDataJsonPath, `${req.url === '/' ? 'home' : req.url.substr(0)}.json`);
+                
+                let json: string;
+                try {
+                    json = await readFileAsync(jsonPath, 'utf8');
+                } catch (error) {
+                    // TODO: do something with error
+                }
 
-    server.use(spaFallback((req, res, _next) => {
-        if (isDev) {
-            const { httpVersion, method, url } = req;
-            console.info(`${httpVersion} ${method} ${url}`);
-        }
-
-        res.set('Content-Type', 'text/html');
-        res.write(indexHtmlStart);
-
-        const context = {};
-        const stream = renderToNodeStream(
-            <StaticRouter location={req.url} context={context}>
-                <App />
-            </StaticRouter>
+                res.write(json === undefined 
+                    ? indexHtmlEnd
+                    : indexHtmlEnd.replace('</div>', `</div><script>window.bootData = ${json};</script>`));
+                res.end();
+            });
+        }));
+    
+        server.listen(PORT, isDev
+            ? () => console.info(`Serving up at http://localhost:${PORT} ...`)
+            : undefined
         );
-        stream.pipe(res, { end: false });
 
-        stream.on('end', () => {
-            res.write(indexHtmlEnd);
-            res.end();
-        });
-    }));
+    } catch (err) {
+        console.error('Problem loading ' + templatePath, err);
+    }
 
-    server.listen(PORT, isDev
-        ? () => console.info(`Serving up at http://localhost:${PORT} ...`)
-        : undefined
-    );
-});
+}
+
+startServer({ templatePath: path.join(__dirname, 'template.html') });
