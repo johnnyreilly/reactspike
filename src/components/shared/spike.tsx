@@ -116,7 +116,7 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
       return (<div>Problems: {this.state.error}...</div>);
     }
 
-    const { spikeName, spikeShortName, spikeUrl, spikeHeaderBG, spikeTitle, sections } = this.state.spikeData;
+    const { spikeName, spikeShortName, spikeUrl, spikeHeaderBG, spikeTitle, sections, generatedAt } = this.state.spikeData;
     const col1s = sections.filter(section => section.col === '1');
     const col2s = sections.filter(section => section.col === '2');
     const col3s = sections.filter(section => section.col === '3');
@@ -166,7 +166,7 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
           </div>
         ))}
       </main>,
-      <Footer key="footer" spikeName={spikeName} autoRefresh={this.state.autoRefresh} setAutoRefresh={this.setAutoRefresh} />
+      <Footer key="footer" spikeName={spikeName} autoRefresh={this.state.autoRefresh} setAutoRefresh={this.setAutoRefresh} generatedAt={generatedAt} />
     ];
   }
 }

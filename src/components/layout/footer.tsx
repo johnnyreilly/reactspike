@@ -4,6 +4,7 @@ interface IFooterProps {
     autoRefresh: boolean;
     setAutoRefresh: (autoRefresh: boolean) => void;
     spikeName: string;
+    generatedAt: string;
 }
 
 export class Footer extends React.Component<IFooterProps> {
@@ -13,6 +14,8 @@ export class Footer extends React.Component<IFooterProps> {
     render() {
         return (
             <footer className="page-footer">
+
+                <span>Last generated at: {this.props.generatedAt}</span>
 
                 <a href="https://twitter.com/readspike" className="logo-link">
                     <svg className="logo-readspike"><use xlinkHref="#logo_readspike" /></svg>
