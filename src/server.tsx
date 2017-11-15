@@ -8,12 +8,23 @@ import * as compression from 'compression';
 import { StaticRouter } from 'react-router-dom';
 import { renderToNodeStream } from 'react-dom/server';
 import { App } from './app';
+import { setBootSpikeData } from './bootData';
+import { ISpike } from '../src-feed-reader/interfaces';
 
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 3000;
+
 console.info(`Server starting in ${isDev ? 'dev mode' : 'prod mode'} on port ${PORT} in ${process.cwd()} __dirname: ${__dirname} ...`);
 
+const spikeDataJsonPath = path.resolve(__dirname, '..', 'App_Data', 'jobs', 'triggered', 'create-json', 'dist-feed-reader', 'spike-data');
 const readFileAsync = util.promisify(readFile);
+
+async function getSpikeData(spikeName: string) {
+    const jsonRequired = path.join(spikeDataJsonPath, (spikeName || 'home') + '.json');
+    const json = await readFileAsync(jsonRequired, 'utf8');
+    const spike: ISpike = JSON.parse(json);
+    return spike;
+}
 
 function spaFallback(callback: express.RequestHandler) {
     const requestHandler: express.RequestHandler = (req, res, next) => {
@@ -33,11 +44,10 @@ async function startServer({ templatePath }: { templatePath: string }) {
 
         server.use(compression());
 
-        const spikeDataJsonPath = path.resolve(__dirname, '..', 'App_Data', 'jobs', 'triggered', 'create-json', 'dist-feed-reader', 'spike-data');
         server.use(express.static(__dirname));
         server.use(express.static(spikeDataJsonPath));
 
-        server.use(spaFallback((req, res, _next) => {
+        server.use(spaFallback(async (req, res, _next) => {
             if (isDev) {
                 const { httpVersion, method, url } = req;
                 console.info(`${httpVersion} ${method} ${url}`);
@@ -50,6 +60,13 @@ async function startServer({ templatePath }: { templatePath: string }) {
             res.setHeader('Expires', '0');
             res.write(indexHtmlStart);
 
+            try {
+                const spike = await getSpikeData(req.url.substr(1));
+                setBootSpikeData(spike);
+            } catch (error) {
+                console.error('Failed to load json for ' + req.url);
+            }
+
             const context = {};
             const stream = renderToNodeStream(
                 <StaticRouter location={req.url} context={context}>
@@ -60,7 +77,7 @@ async function startServer({ templatePath }: { templatePath: string }) {
 
             stream.on('end', () => {
                 /*
-                const jsonPath = path.join(spikeDataJsonPath, `${req.url === '/' ? 'home' : req.url.substr(0)}.json`);
+                const jsonPath = path.join(spikeDataJsonPath, `${req.url === '/' ? 'home' : req.url.substr(1)}.json`);
                 
                 let json: string;
                 try {

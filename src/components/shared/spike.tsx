@@ -5,7 +5,7 @@ import { Header } from '../layout/header';
 import { Footer } from '../layout/footer';
 import { canUseDOM } from '../../canUseDOM';
 import { ISpike } from '../../../src-feed-reader/interfaces';
-import { getBootData, getJson, setBootData } from '../../bootData';
+import { getBootSpikeData, getSpikeDataBrowser, setBootSpikeData } from '../../bootData';
 import { ItemTemplate } from './itemTemplate';
 import { ItemTemplateBitcoin } from './itemTemplateBitcoin';
 
@@ -35,17 +35,15 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
         menuOpen: false,
         autoRefresh: window.localStorage.getItem(AUTOREFRESH) === 'true',
         moreChecked: [], // JSON.parse(window.localStorage.getItem(`${spikeName}_moreChecked`) || '[]'),
-        spikeData: getBootData(spikeName)
+        spikeData: getBootSpikeData(spikeName)
       }
       : {
         menuOpen: false,
         autoRefresh: false,
         moreChecked: [],
-        spikeData: spikeName.includes('.')
+        spikeData: spikeName.includes('.') // TODO: Do we need this?
           ? undefined
-          : require(`../../../App_Data/jobs/triggered/create-json/dist-feed-reader/spike-data/${
-            spikeName === '' ? 'home' : spikeName
-            }.json`)
+          : getBootSpikeData(spikeName)
       };
   }
 
@@ -72,10 +70,10 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
     }
 
     this.setState(_prevState => ({ loading: true }));
-    getJson(spikeName)
+    getSpikeDataBrowser(spikeName)
       .then(spikeData => {
         this.setState(_prevState => ({ spikeData, loading: false }));
-        setBootData(spikeData);
+        setBootSpikeData(spikeData);
       })
       .catch(error => {
         this.setState(_prevState => ({ error: error.message ? error.message : error, loading: false }));

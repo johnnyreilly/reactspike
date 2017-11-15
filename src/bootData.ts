@@ -2,16 +2,18 @@ import { ISpike } from '../src-feed-reader/interfaces';
 
 let _bootData: ISpike;
 
-export const getBootData = (url: string) => {
-    if (_bootData.spikeShortName === url) {
+export function getBootSpikeData(url: string) {
+    if (_bootData && _bootData.spikeShortName === url) {
         return _bootData;
     }
     return undefined;
-};
+}
 
-export const setBootData = (bootData: ISpike) => _bootData = bootData;
+export function setBootSpikeData(bootSpikeData: ISpike) {
+    _bootData = bootSpikeData;
+}
 
-export async function getJson(spikeName: string) {
+export async function getSpikeDataBrowser(spikeName: string) {
     const jsonRequired = (spikeName || 'home') + '.json';
     const response = await fetch(jsonRequired);
     const contentType = response.headers.get('content-type');

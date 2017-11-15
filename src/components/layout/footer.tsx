@@ -15,12 +15,12 @@ export class Footer extends React.Component<IFooterProps> {
         return (
             <footer className="page-footer">
 
-                <span>Last generated at: {this.props.generatedAt}</span>
-
                 <a href="https://twitter.com/readspike" className="logo-link">
                     <svg className="logo-readspike"><use xlinkHref="#logo_readspike" /></svg>
                     {this.props.spikeName}
                 </a>
+
+                <span>Last generated at: {this.props.generatedAt}</span>
 
                 <label htmlFor="autoRefresh" className="checkbox-label">
                     <input type="checkbox" name="autoRefresh" id="autoRefresh" checked={this.props.autoRefresh} onChange={this.handleInputChange} />
