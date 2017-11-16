@@ -10,6 +10,7 @@ interface IHeaderProps {
     spikeShortName: string;
     spikeName: string;
     menuOpen: boolean;
+    loading: boolean;
     toggleMenu: () => void;
 }
 
@@ -71,6 +72,8 @@ export class Header extends React.Component<IHeaderProps> {
                 </a>
 
                 <h1 className="logo-header">{spikeName} - {spikeTitle}</h1>
+
+                {this.props.loading ? <svg className="loading-icon icon-spin"><use xlinkHref="#logo_readspike" /></svg> : null}
 
                 <nav className="main-nav" role="navigation">
                     <input

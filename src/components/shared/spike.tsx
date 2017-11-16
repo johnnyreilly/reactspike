@@ -129,6 +129,7 @@ export class SpikePage extends React.Component<ISpikeProps, IState> {
         spikeHeaderBG={spikeHeaderBG}
         spikeUrl={spikeUrl}
         menuOpen={this.state.menuOpen}
+        loading={this.state.loading}
         toggleMenu={this.toggleMenu}
       />,
       <main key="main" className="col-group">
