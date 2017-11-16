@@ -22,8 +22,8 @@ const redditMapper: Mapper<IReddit> = configAndData => {
         over18: child.data.over_18,
         comments: `https://reddit.com${child.data.permalink}`,
         postHint: child.data.post_hint === 'rich:video' ? 'video' : child.data.post_hint,
-        thumbnail: child.data.preview && child.data.preview.images.length > 0 && child.data.preview.images[0].resolutions.length > 0
-            ? child.data.preview.images[0].resolutions[child.data.preview.images[0].resolutions.length - 1].url
+        thumbnail: child.data.preview && child.data.preview.images.length > 0 && child.data.preview.images[0].resolutions.length >= 3
+            ? child.data.preview.images[0].resolutions[2].url.replace(/&amp;/g, '&')
             : undefined,
         selftext: child.data.selftext,
         subreddit: child.data.subreddit,
