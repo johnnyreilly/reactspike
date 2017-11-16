@@ -134,13 +134,14 @@ export function mapData(configAndData: ISectionConfig & ISectionParsed): ISectio
                         
                         title: data.title
                             ? strip_tags(data.title)
+                                .replace(/(\s|\t)+/g, ' ')
                                 .trim()
                                 .substr(0, 340)
                             : data.title,
 
                         selftext: data.selftext
                             ? htmlspecialchars(strip_tags(data.selftext), 'ENT_QUOTES')
-                                .replace(/\s+/g, ' ')
+                                .replace(/(\s|\t)+/g, ' ')
                                 .trim()
                                 .substr(0, 340)
                             : data.selftext

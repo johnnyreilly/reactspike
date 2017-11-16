@@ -20,7 +20,7 @@ export class Footer extends React.Component<IFooterProps> {
                     {this.props.spikeName}
                 </a>
 
-                <span>Last generated at: {this.props.generatedAt}</span>
+                <span>Feeds last read at: {this.props.generatedAt}</span>
 
                 <label htmlFor="autoRefresh" className="checkbox-label">
                     <input type="checkbox" name="autoRefresh" id="autoRefresh" checked={this.props.autoRefresh} onChange={this.handleInputChange} />
