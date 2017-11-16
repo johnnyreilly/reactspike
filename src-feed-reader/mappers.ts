@@ -133,7 +133,7 @@ export function mapData(configAndData: ISectionConfig & ISectionParsed): ISectio
                         comments: data.comments ? htmlspecialchars_decode(data.comments) : data.comments,
                         
                         title: data.title
-                            ? strip_tags(data.title)
+                            ? htmlspecialchars(strip_tags(data.title))
                                 .replace(/(\s|\t)+/g, ' ')
                                 .trim()
                                 .substr(0, 340)
