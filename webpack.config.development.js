@@ -9,26 +9,6 @@ const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const { rules, extensions, browserEntryDev, serverEntry, output } = require('./webpack.shared');
 
-// * Only necessary until https://github.com/Realytics/fork-ts-checker-webpack-plugin/pull/48 has been merged and released
-// START 
-const chalk = require("chalk");
-const os = require("os");
-
-function formatterForLineAndColumnUrlClicking(message, useColors) {
-    const colors = new chalk.constructor({ enabled: useColors });
-    const messageColor = message.isWarningSeverity() ? colors.bold.yellow : colors.bold.red;
-    const fileAndNumberColor = colors.bold.cyan;
-    const codeColor = colors.grey;
-
-    return [
-        messageColor(message.getSeverity().toUpperCase() + " in ") +
-        fileAndNumberColor(message.getFile() + "(" + message.getLine() + "," + message.getCharacter() + ")") +
-        messageColor(':'),
-        codeColor(message.getFormattedCode() + ': ') + message.getContent()
-    ].join(os.EOL);
-}
-// END
-
 const PUBLIC_URL = 'http://localhost:3000';
 // const PUBLIC_URL = 'https://reactspike.azurewebsites.net';
 const definedVariables = new webpack.DefinePlugin({
@@ -68,7 +48,6 @@ const browserConfig = {
         new ForkTsCheckerWebpackPlugin({
             tslint: true,
             checkSyntacticErrors: true,
-            formatter: formatterForLineAndColumnUrlClicking,
             watch: ['./src'] // optional but improves performance (fewer stat calls)
         }),
         new webpack.NoEmitOnErrorsPlugin(),
