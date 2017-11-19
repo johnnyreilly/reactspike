@@ -1,0 +1,14 @@
+{
+    "name": "readspike",
+    "short_name": "readspike",
+    "lang": "en-GB",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#1a1c20",
+    "icons": [
+      {
+        "src": "images/apple-touch-icon.png",
+        "sizes": "180x180"
+      }
+    ]
+  }

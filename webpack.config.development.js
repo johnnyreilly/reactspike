@@ -38,6 +38,9 @@ const browserConfig = {
         new CopyWebpackPlugin([{
             from: 'src/images',
             to: 'images'
+        }, {
+            from: 'src/manifest.json',
+            to: 'manifest.json'
         }]),
         new HtmlWebpackPlugin({
             favicon: 'src/favicon.ico',
