@@ -3,6 +3,7 @@ const fs = require('fs');
 const webpack = require('webpack');
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
@@ -31,8 +32,13 @@ const browserConfig = {
     plugins: [
         definedVariables,
 
-        // These plugins will create the HTML / CSS / FavIcon etc static assets 
         new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js' }),
+
+        // These plugins will create the HTML / CSS / FavIcon etc static assets 
+        new CopyWebpackPlugin([{
+            from: 'src/images',
+            to: 'images'
+        }]),
         new HtmlWebpackPlugin({
             favicon: 'src/favicon.ico',
             filename: 'template.html',

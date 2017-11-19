@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -31,6 +32,10 @@ const browserConfig = {
         definedVariables,
 
         // These plugins will create the HTML / CSS / FavIcon / ServiceWorker etc static assets 
+        new CopyWebpackPlugin([{
+            from: 'src/images',
+            to: 'images'
+        }]),
         new HtmlWebpackPlugin({
             filename: 'template.html',
             favicon: 'src/favicon.ico',
